@@ -11,17 +11,17 @@ namespace ProyectoFinal_Restaurante.Repositories.Implementations
             return product;
         }
 
-        public bool DeleteProduct(int productId)
+        public Product DeleteProduct(int productId)
         {
             var productAEliminar = _products.FirstOrDefault(p => p.ProductId == productId);
             if (productAEliminar == null)
             {
-                return false;
+                throw new Exception("Producto no encontrado");
             }
             else
             {
                 _products.Remove(productAEliminar);
-                return true;
+                return productAEliminar;
             }
         }
 

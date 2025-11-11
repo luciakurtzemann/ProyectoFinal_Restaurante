@@ -7,27 +7,108 @@ namespace ProyectoFinal_Restaurante.Repositories.Implementations
     {
         public Category CreateCategory(Category category)
         {
-            throw new NotImplementedException();
+            _categories.Add(category);
+            return category;
         }
 
         public Category DeleteCategory(int id)
         {
-            throw new NotImplementedException();
+            var categoryToDelete = _categories.FirstOrDefault(x => x.CategoryId == id);
+            if (categoryToDelete == null)
+            {
+                throw new Exception("Categoría no encontrada");
+            }
+            else
+            {
+                _categories.Remove(categoryToDelete);
+                return categoryToDelete;
+            }
         }
 
         public Category GetCategory(int id)
         {
-            throw new NotImplementedException();
+            var category = _categories.FirstOrDefault(x=>x.CategoryId == id);
+            if (category == null)
+            {
+                throw new Exception("Categoría no encontrada");
+            }
+            else
+            {
+                return category;
+            }
         }
 
-        public Category GetCategoryByRestaurant(int restaurantId)
+        public List<Category> GetCategoriesByRestaurant(int restaurantId)
         {
-            throw new NotImplementedException();
+            List<Category> listadoCategoryByRestaurant = _categories.Where(x => x.RestaurantId ==  restaurantId).ToList();
+            if (listadoCategoryByRestaurant.Count == 0)
+            {
+                throw new Exception("El restaurante seleccionado no tiene categorias.");
+            }
+            return listadoCategoryByRestaurant;
         }
 
         public Category UpdateCategory(Category category)
         {
-            throw new NotImplementedException();
+            var categoryToUpdate = _categories.FirstOrDefault(x => x.CategoryId ==  category.CategoryId);
+
+            if (categoryToUpdate == null)
+            {
+                throw new Exception("Categoría no encontrada");
+            }
+            else
+            {
+                categoryToUpdate.CategoryName = category.CategoryName;
+                return categoryToUpdate;
+                //save changes
+            }
         }
+
+
+        public static List<Category> _categories = new List<Category>
+        {
+            new Category
+            {
+                CategoryId = 1,
+                CategoryName = "Comidas Rápidas",
+                RestaurantId = 1,
+                Products = new List<Product>() // se puede llenar después si querés
+            },
+            new Category
+            {
+                CategoryId = 2,
+                CategoryName = "Pizzas",
+                RestaurantId = 1,
+                Products = new List<Product>()
+            },
+            new Category
+            {
+                CategoryId = 3,
+                CategoryName = "Cafetería",
+                RestaurantId = 2,
+                Products = new List<Product>()
+            },
+            new Category
+            {
+                CategoryId = 4,
+                CategoryName = "Bebidas Frías",
+                RestaurantId = 2,
+                Products = new List<Product>()
+            },
+            new Category
+            {
+                CategoryId = 5,
+                CategoryName = "Mexicana",
+                RestaurantId = 3,
+                Products = new List<Product>()
+            },
+            new Category
+            {
+                CategoryId = 6,
+                CategoryName = "Ensaladas",
+                RestaurantId = 3,
+                Products = new List<Product>()
+            }
+        };
     }
 }
