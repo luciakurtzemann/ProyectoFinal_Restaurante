@@ -6,7 +6,7 @@ namespace ProyectoFinal_Restaurante.Repositories.Interfaces
     {
         public Restaurant CreateRestaurant (Restaurant newRestaurant);
         public Restaurant UpdateRestaurant (Restaurant restaurant);
-        public void DeleteRestaurant(int restaurantId);
+        public bool DeleteRestaurant(int restaurantId);
         public string ChangePassword (int restaurantId, string newPassword);
     }
 }

@@ -11,15 +11,16 @@ namespace ProyectoFinal_Restaurante.Repositories.Implementations
             return newRestaurant;
         }
 
-        public void DeleteRestaurant(int restaurantId)
+        public bool DeleteRestaurant(int restaurantId)
         {
             var restaurantToDelete = _restaurants.FirstOrDefault(x => x.RestaurantId == restaurantId);
             if (restaurantToDelete != null)
             {
                 _restaurants.Remove(restaurantToDelete);
-                return;
+                return true;
             }
-            throw new Exception("Restaurante no encontrado");
+            return false;
+            //throw new Exception("Restaurante no encontrado");
         }
 
         public Restaurant UpdateRestaurant(Restaurant restaurant)
