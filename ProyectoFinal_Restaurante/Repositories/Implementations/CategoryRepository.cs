@@ -11,17 +11,17 @@ namespace ProyectoFinal_Restaurante.Repositories.Implementations
             return category;
         }
 
-        public Category DeleteCategory(int id)
+        public bool DeleteCategory(int id)
         {
             var categoryToDelete = _categories.FirstOrDefault(x => x.CategoryId == id);
             if (categoryToDelete == null)
             {
-                throw new Exception("Categoría no encontrada");
+                return false;
             }
             else
             {
                 _categories.Remove(categoryToDelete);
-                return categoryToDelete;
+                return true;
             }
         }
 

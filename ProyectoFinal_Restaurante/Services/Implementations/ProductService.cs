@@ -153,7 +153,8 @@ namespace ProyectoFinal_Restaurante.Services.Implementations
 
         public List<ProductDto> GetProductsWithDiscount()
         {
-            List<ProductDto> listadoProductosDescuento = _productRepository.GetProductsWithDiscount().Select(product => new ProductDto()
+            List<ProductDto> listadoProductosDescuento = _productRepository.GetProductsWithDiscount()
+                .Select(product => new ProductDto()
             {
                 ProductName = product.ProductName,
                 ProductDescription = product.ProductDescription,

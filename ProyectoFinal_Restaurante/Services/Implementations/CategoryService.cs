@@ -1,4 +1,5 @@
-﻿using ProyectoFinal_Restaurante.Models.DTOs.Requests;
+﻿using ProyectoFinal_Restaurante.Entities;
+using ProyectoFinal_Restaurante.Models.DTOs.Requests;
 using ProyectoFinal_Restaurante.Models.DTOs.Responses;
 using ProyectoFinal_Restaurante.Repositories.Interfaces;
 using ProyectoFinal_Restaurante.Services.Interfaces;
@@ -17,29 +18,64 @@ namespace ProyectoFinal_Restaurante.Services.Implementations
 
 
         //MÉTODOS
-        public CategoryDto CreateCategory(CreateCategoryDto category)
+        public CategoryDto CreateCategory(CreateCategoryDto category, int loggedRestaurantId)
         {
-            throw new NotImplementedException();
+            Category categoryToCreate = new Category()
+            {
+                CategoryName = category.CategoryName,
+                RestaurantId = loggedRestaurantId
+            };
+            Category createdCategory = _categoryRepository.CreateCategory(categoryToCreate);
+
+            CategoryDto categoryResponse = new CategoryDto()
+            {
+                CategoryName = createdCategory.CategoryName,
+                RestaurantId = createdCategory.RestaurantId
+            };
+            return categoryResponse;
         }
 
-        public CategoryDto DeleteCategory(int id)
+        public bool DeleteCategory(int id)
         {
-            throw new NotImplementedException();
+            return _categoryRepository.DeleteCategory(id);
         }
 
         public List<CategoryDto> GetCategoriesByRestaurant(int restaurantId)
         {
-            throw new NotImplementedException();
+            List<CategoryDto> listadoCategoryPorRestaurantDto = _categoryRepository.GetCategoriesByRestaurant(restaurantId)
+                .Select(category => new CategoryDto()
+                {
+                    CategoryName = category.CategoryName,
+                    RestaurantId = category.RestaurantId
+                }).ToList();
+            return listadoCategoryPorRestaurantDto;
         }
 
         public CategoryDto GetCategory(int id)
         {
-            throw new NotImplementedException();
+            Category categoria = _categoryRepository.GetCategory(id);
+            CategoryDto categoriaResponse = new CategoryDto()
+            {
+                CategoryName = categoria.CategoryName,
+                RestaurantId = categoria.RestaurantId
+            };
+            return categoriaResponse;
         }
 
-        public CategoryDto UpdateCategory(UpdateCategoryDto category)
+        public CategoryDto UpdateCategory(UpdateCategoryDto category)       //CHEQUEAR
         {
-            throw new NotImplementedException();
+            Category categoryToUpdate = new Category()
+            {
+                CategoryName= category.CategoryName,
+            };
+            Category categoryUpdated = _categoryRepository.UpdateCategory(categoryToUpdate);
+
+            CategoryDto categoryResponse = new CategoryDto()
+            {
+                CategoryName=categoryUpdated.CategoryName,
+                RestaurantId=categoryUpdated.RestaurantId,
+            };
+            return categoryResponse;
         }
     }
 }
