@@ -12,6 +12,9 @@ namespace ProyectoFinal_Restaurante.Models.DTOs.Requests
         [Required]
         [Range (0, 100000)]
         public double Price { get; set; }
-        public int RestaurantId { get; set; }
+        [Range(0, 1)]
+        public int? DiscountPercent { get; set; }
+        public bool? HappyHour { get; set; }
+        //public int RestaurantId { get; set; }
     }
 }

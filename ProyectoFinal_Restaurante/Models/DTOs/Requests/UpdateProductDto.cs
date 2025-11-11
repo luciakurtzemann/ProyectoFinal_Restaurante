@@ -6,12 +6,12 @@ namespace ProyectoFinal_Restaurante.Models.DTOs.Requests
 {
     public class UpdateProductDto
     {
-        public string ProductName { get; set; }
+        public string? ProductName { get; set; }
         public string? ProductDescription { get; set; }
-        public double Price { get; set; }
+        public double? Price { get; set; }
         [Range (0,1)]
-        public int DiscountPercent { get; set; }
-        public bool HappyHour { get; set; } 
-        public bool IsFavorite { get; set; }
+        public int? DiscountPercent { get; set; }
+        public bool? HappyHour { get; set; } 
+        public bool? IsFavorite { get; set; }
     }
 }
