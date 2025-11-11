@@ -17,7 +17,6 @@ namespace ProyectoFinal_Restaurante.Repositories.Interfaces
         public Product DeleteProduct(int productId);
         public int ModifyDiscount (int idProducto,  double discount);
         public int IncrementPriceByRestaurant(double increment, int restaurantId);
-        public void ModifyHappyHour (int productId);          //REVISAR SALIDA
-
+        public bool ModifyHappyHour (int productId);
     }
 }

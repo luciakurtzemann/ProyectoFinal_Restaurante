@@ -12,6 +12,6 @@ namespace ProyectoFinal_Restaurante.Entities
 
         [ForeignKey("RestaurantId")]
         public Restaurant Restaurant { get; set; } 
-        public int RestaurantId { get; set; } 
+        public int RestaurantId { get; set; }  
     }
 }
