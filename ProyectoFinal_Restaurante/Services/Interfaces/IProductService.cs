@@ -13,9 +13,9 @@ namespace ProyectoFinal_Restaurante.Services.Interfaces
         public List<ProductDto> GetProductsFavorite();
         public List<ProductDto> GetProductsWithDiscount();
         public List<ProductDto> GetProductsHappyHour();
-        public ProductDto CreateProduct(CreateProductDto productDto);
+        public ProductDto CreateProduct(CreateProductDto productDto, int loggedRestaurantId);
         public ProductDto UpdateProduct(UpdateProductDto productDto);
-        public ProductDto DeleteProduct(int productId);
+        public bool DeleteProduct(int productId);
         public ProductDto ModifyDiscount(int idProducto, double discount);
         public void IncrementPriceByRestaurant(double increment, int restaurantId);
         public bool ModifyHappyHour(int productId);

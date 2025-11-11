@@ -1,6 +1,213 @@
-﻿namespace ProyectoFinal_Restaurante.Services.Implementations
+﻿using ProyectoFinal_Restaurante.Entities;
+using ProyectoFinal_Restaurante.Models.DTOs.Requests;
+using ProyectoFinal_Restaurante.Models.DTOs.Responses;
+using ProyectoFinal_Restaurante.Repositories.Interfaces;
+using ProyectoFinal_Restaurante.Services.Interfaces;
+
+namespace ProyectoFinal_Restaurante.Services.Implementations
 {
-    public class ProductService
+    public class ProductService : IProductService
     {
+        //INYECCIÓN DE DEPENDENCIAS
+        private readonly IProductRepository _productRepository;
+
+        public ProductService (IProductRepository productRepository)
+        {
+            _productRepository = productRepository;
+        }
+
+        //MÉTODOS
+        public ProductDto CreateProduct(CreateProductDto productDto, int loggedRestaurantId)
+        {
+            Product product = new Product()
+            {
+                ProductName = productDto.ProductName,
+                ProductDescription = productDto.ProductDescription,
+                Price = productDto.Price,
+                Discount = productDto.Discount,
+                HappyHour = productDto.HappyHour,
+                CategoryId = productDto.CategoryId,
+                RestaurantId = loggedRestaurantId,
+            };
+            _productRepository.CreateProduct(product);
+
+            ProductDto productResponseDto = new ProductDto()
+            {
+                ProductName = product.ProductName,
+                ProductDescription = product.ProductDescription,
+                Price = product.Price,
+                Discount = product.Discount,
+                HappyHour = product.HappyHour,
+                IsFavorite = product.IsFavorite,
+                RestaurantId = product.RestaurantId,
+                CategoryId = product.CategoryId,
+
+            };
+            return productResponseDto;
+
+        }
+
+        public bool DeleteProduct(int productId)
+        {
+            return _productRepository.DeleteProduct(productId);
+        }
+
+        public List<ProductDto> GetAllProducts()
+        {
+            var listaProductsDto = _productRepository.GetAllProducts().Select( product => new ProductDto()
+            {
+                ProductName = product.ProductName,
+                ProductDescription = product.ProductDescription,
+                Price = product.Price,
+                Discount = product.Discount,
+                HappyHour = product.HappyHour,
+                IsFavorite = product.IsFavorite,
+                RestaurantId = product.RestaurantId,
+                CategoryId = product.CategoryId,
+            }).ToList();
+            return listaProductsDto;
+        }
+
+        public ProductDto GetProductById(int productId)
+        {
+            Product producto = _productRepository.GetProductById(productId);
+
+            ProductDto productResponse = new ProductDto()
+            {
+                ProductName = producto.ProductName,
+                ProductDescription = producto.ProductDescription,
+                Price = producto.Price,
+                Discount = producto.Discount,
+                HappyHour = producto.HappyHour,
+                IsFavorite = producto.IsFavorite,
+                RestaurantId = producto.RestaurantId,
+                CategoryId = producto.CategoryId,
+
+            };
+            return productResponse;
+        }
+
+        public List<ProductDto> GetProductsByCategory(int categoryId)
+        {
+            List<ProductDto> listadoProductosPorCategoria= _productRepository.GetProductsByCategory(categoryId).Select(product => new ProductDto()
+            {
+                ProductName = product.ProductName,
+                ProductDescription = product.ProductDescription,
+                Price = product.Price,
+                Discount = product.Discount,
+                HappyHour = product.HappyHour,
+                IsFavorite = product.IsFavorite,
+                RestaurantId = product.RestaurantId,
+                CategoryId = product.CategoryId,
+            }).ToList(); 
+            return listadoProductosPorCategoria;
+        }
+
+        public List<ProductDto> GetProductsByRestaurant(int restaurantId)
+        {
+            List<ProductDto> listadoProductosPorRestaurante = _productRepository.GetProductsByRestaurant(restaurantId).Select(product => new ProductDto()
+            {
+                ProductName = product.ProductName,
+                ProductDescription = product.ProductDescription,
+                Price = product.Price,
+                Discount = product.Discount,
+                HappyHour = product.HappyHour,
+                IsFavorite = product.IsFavorite,
+                RestaurantId = product.RestaurantId,
+                CategoryId = product.CategoryId,
+            }).ToList();
+            return listadoProductosPorRestaurante;
+        }
+
+        public List<ProductDto> GetProductsFavorite()
+        {
+            List<ProductDto> listadoProductosFavoritos = _productRepository.GetProductsFavorite().Select(product => new ProductDto()
+            {
+                ProductName = product.ProductName,
+                ProductDescription = product.ProductDescription,
+                Price = product.Price,
+                Discount = product.Discount,
+                HappyHour = product.HappyHour,
+                IsFavorite = product.IsFavorite,
+                RestaurantId = product.RestaurantId,
+                CategoryId = product.CategoryId,
+            }).ToList();
+            return listadoProductosFavoritos;
+        }
+
+        public List<ProductDto> GetProductsHappyHour()
+        {
+            List<ProductDto> listadoProductosHappyHour = _productRepository.GetProductsHappyHour().Select(product => new ProductDto()
+            {
+                ProductName = product.ProductName,
+                ProductDescription = product.ProductDescription,
+                Price = product.Price,
+                Discount = product.Discount,
+                HappyHour = product.HappyHour,
+                IsFavorite = product.IsFavorite,
+                RestaurantId = product.RestaurantId,
+                CategoryId = product.CategoryId,
+            }).ToList();
+            return listadoProductosHappyHour;
+        }
+
+        public List<ProductDto> GetProductsWithDiscount()
+        {
+            List<ProductDto> listadoProductosDescuento = _productRepository.GetProductsWithDiscount().Select(product => new ProductDto()
+            {
+                ProductName = product.ProductName,
+                ProductDescription = product.ProductDescription,
+                Price = product.Price,
+                Discount = product.Discount,
+                HappyHour = product.HappyHour,
+                IsFavorite = product.IsFavorite,
+                RestaurantId = product.RestaurantId,
+                CategoryId = product.CategoryId,
+            }).ToList();
+            return listadoProductosDescuento;
+        }
+
+        public void IncrementPriceByRestaurant(double increment, int restaurantId)
+        {
+            _productRepository.IncrementPriceByRestaurant(increment, restaurantId);
+            //chequear esto
+        }
+
+        public ProductDto ModifyDiscount(int idProducto, double discount)
+        {
+            _productRepository.ModifyDiscount(idProducto, discount);
+            return GetProductById(idProducto);
+        }
+
+        public bool ModifyHappyHour(int productId)
+        {
+            return _productRepository.ModifyHappyHour(productId);
+        }
+
+        public ProductDto UpdateProduct(UpdateProductDto productDto)
+        {
+            Product product = new Product()
+            {
+                ProductName = productDto.ProductName,
+                ProductDescription = productDto.ProductDescription,
+                Price = productDto.Price,
+                Discount = productDto.Discount,
+                HappyHour = productDto.HappyHour,
+            };
+            Product productUpdated = _productRepository.UpdateProduct(product);
+
+            ProductDto productResponseDto = new ProductDto()
+            {
+                ProductName = productUpdated.ProductName,
+                ProductDescription = productUpdated.ProductDescription,
+                Price = productUpdated.Price,
+                Discount = productUpdated.Discount,
+                HappyHour = productUpdated.HappyHour,
+                IsFavorite = productUpdated.IsFavorite,
+                RestaurantId = productUpdated.RestaurantId,
+                CategoryId = productUpdated.CategoryId,
+            };
+            return productResponseDto;
+        }
     }
 }

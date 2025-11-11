@@ -13,8 +13,9 @@ namespace ProyectoFinal_Restaurante.Models.DTOs.Requests
         [Range (0, 100000)]
         public double Price { get; set; }
         [Range(0, 1)]
-        public int? DiscountPercent { get; set; }
-        public bool? HappyHour { get; set; }
+        public double Discount { get; set; }
+        public bool HappyHour { get; set; }
+        public int CategoryId { get; set; }
         //public int RestaurantId { get; set; }
     }
 }

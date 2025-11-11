@@ -9,7 +9,10 @@ namespace ProyectoFinal_Restaurante.Models.DTOs.Responses
         public string ProductName { get; set; }
         public string? ProductDescription { get; set; }
         public double Price { get; set; }
+        public double Discount { get; set; } = 0;
+        public bool HappyHour { get; set; } = false;
         public bool IsFavorite { get; set; } = false;
         public int RestaurantId { get; set; }
+        public int CategoryId { get; set; }
     }
 }

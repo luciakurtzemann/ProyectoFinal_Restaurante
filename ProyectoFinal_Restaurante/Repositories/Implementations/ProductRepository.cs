@@ -11,17 +11,17 @@ namespace ProyectoFinal_Restaurante.Repositories.Implementations
             return product;
         }
 
-        public Product DeleteProduct(int productId)
+        public bool DeleteProduct(int productId)
         {
             var productAEliminar = _products.FirstOrDefault(p => p.ProductId == productId);
             if (productAEliminar == null)
             {
-                throw new Exception("Producto no encontrado");
+                return false;
             }
             else
             {
                 _products.Remove(productAEliminar);
-                return productAEliminar;
+                return true;
             }
         }
 
@@ -100,13 +100,13 @@ namespace ProyectoFinal_Restaurante.Repositories.Implementations
             }
         }
 
-        public Product ModifyDiscount(int idProducto, double newDiscount)
+        public double ModifyDiscount(int idProducto, double newDiscount)
         {
             var product = GetProductById(idProducto);
             product.Discount = newDiscount;
             //    _context.Products.Update(product);
             //    _context.SaveChanges();
-            return product;
+            return newDiscount;
 
         }
 

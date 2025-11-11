@@ -1,3 +1,8 @@
+using ProyectoFinal_Restaurante.Repositories.Implementations;
+using ProyectoFinal_Restaurante.Repositories.Interfaces;
+using ProyectoFinal_Restaurante.Services.Implementations;
+using ProyectoFinal_Restaurante.Services.Interfaces;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -6,6 +11,13 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddScoped <IProductRepository, ProductRepository>();
+builder.Services.AddScoped<IRestaurantRepository, RestaurantRepository>();
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddScoped<IRestaurantService, RestaurantService>();
+builder.Services.AddScoped<ICategoryService,  CategoryService>();
 
 var app = builder.Build();
 
