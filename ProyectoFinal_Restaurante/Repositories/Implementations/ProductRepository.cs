@@ -7,71 +7,145 @@ namespace ProyectoFinal_Restaurante.Repositories.Implementations
     {
         public Product CreateProduct(Product product)
         {
-            throw new NotImplementedException();
+            _products.Add(product);
+            return product;
         }
 
-        public Product DeleteProduct(int productId)
+        public bool DeleteProduct(int productId)
         {
-            throw new NotImplementedException();
+            var productAEliminar = _products.FirstOrDefault(p => p.ProductId == productId);
+            if (productAEliminar == null)
+            {
+                return false;
+            }
+            else
+            {
+                _products.Remove(productAEliminar);
+                return true;
+            }
         }
 
         public List<Product> GetAllProducts()
         {
-            throw new NotImplementedException();
+            return _products;
         }
 
         public Product GetProductById(int productId)
         {
-            throw new NotImplementedException();
+            var product = _products.FirstOrDefault(x => x.ProductId == productId);
+            if (product == null)
+            {
+                throw new Exception ("Producto no encontrado");
+            }
+            return product;
         }
 
         public List<Product> GetProductsByCategory(int categoryId)
         {
-            throw new NotImplementedException();
+            List<Product> listadoProductsByCategory = _products.Where(x=> x.CategoryId == categoryId).ToList();
+            if (listadoProductsByCategory.Count == 0)
+            {
+                throw new Exception("La categoría seleccionada no tiene productos.");
+            }
+            return listadoProductsByCategory;
         }
 
         public List<Product> GetProductsByRestaurant(int restaurantId)
         {
-            throw new NotImplementedException();
+            List<Product> listadoProductByRestaurant = _products.Where(x => x.RestaurantId == restaurantId).ToList();
+            if (listadoProductByRestaurant.Count == 0)
+            {
+                throw new Exception("El restaurante seleccionado no tiene productos.");
+            }
+            return listadoProductByRestaurant;
         }
 
         public List<Product> GetProductsFavorite()
         {
-            throw new NotImplementedException();
+            List<Product> listadoProductFavorite = _products.Where( x => x.IsFavorite == true ).ToList();
+            if (listadoProductFavorite.Count == 0)
+            {
+                throw new Exception("Actualmente no hay productos marcados como favoritos.");
+            }
+            return listadoProductFavorite;
         }
 
         public List<Product> GetProductsHappyHour()
         {
-            throw new NotImplementedException();
+            List<Product> listadoProductHappyHour = _products.Where(x => x.HappyHour == true).ToList();
+            if (listadoProductHappyHour.Count == 0)
+            {
+                throw new Exception("Actualmente no hay productos con Happy Hour.");
+            }
+            return listadoProductHappyHour;
         }
 
         public List<Product> GetProductsWithDiscount()
         {
-            throw new NotImplementedException();
+            List<Product> listadoProductsWithDiscount = _products.Where( x => x.Discount != 0).ToList();
+            if (listadoProductsWithDiscount.Count == 0)
+            {
+                throw new Exception("Actualmente no hay productos con descuento.");
+            }
+            return listadoProductsWithDiscount;
         }
 
-        public int IncrementPriceByRestaurant(double increment, int restaurantId)
+        public void IncrementPriceByRestaurant(double increment, int restaurantId)
         {
-            throw new NotImplementedException();
+            List<Product> listadoProductsByRestaurant = GetProductsByRestaurant(restaurantId);
+            for (int i= 0; i<listadoProductsByRestaurant.Count; i++)
+            {
+                listadoProductsByRestaurant[i].Price += listadoProductsByRestaurant[i].Price * increment;
+                //save changes
+            }
         }
 
-        public int ModifyDiscount(int idProducto, double discount)
+        public Product ModifyDiscount(int idProducto, double newDiscount)
         {
-            throw new NotImplementedException();
+            var product = GetProductById(idProducto);
+            product.Discount = newDiscount;
+            //    _context.Products.Update(product);
+            //    _context.SaveChanges();
+            return product;
+
         }
 
         public bool ModifyHappyHour(int productId)
         {
-            throw new NotImplementedException();
+            var product = GetProductById(productId);
+            if (product.HappyHour == true)
+            {
+                product.HappyHour = false;
+            }
+            else
+            {
+                product.HappyHour = true;
+            }
+            return product.HappyHour;
         }
 
         public Product UpdateProduct(Product product)
         {
-            throw new NotImplementedException();
+            var productToUpdate = _products.FirstOrDefault(x=> x.ProductId == product.ProductId);
+
+            if (productToUpdate == null)
+            {
+                throw new Exception("Producto no encontrado");
+            }
+            else
+            {
+                productToUpdate.ProductName = product.ProductName;
+                productToUpdate.ProductDescription = product.ProductDescription;
+                productToUpdate.Price = product.Price;
+                productToUpdate.Discount = product.Discount;
+                productToUpdate.HappyHour = product.HappyHour; 
+                //save changes
+                return productToUpdate;
+            }
         }
 
 
-        public static List<Product> Products = new List<Product>
+        public static List<Product> _products = new List<Product>
         {
             new Product
             {

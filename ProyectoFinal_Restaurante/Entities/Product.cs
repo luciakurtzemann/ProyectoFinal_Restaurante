@@ -19,5 +19,9 @@ namespace ProyectoFinal_Restaurante.Entities
         public Restaurant Restaurant { get; set; }
         public int RestaurantId { get; set; }
 
+        [ForeignKey("CategoryId")]
+        public Category Category { get; set; }
+        public int CategoryId { get; set; }
+
     }
 }
