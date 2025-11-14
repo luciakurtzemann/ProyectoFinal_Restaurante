@@ -7,9 +7,10 @@ namespace ProyectoFinal_Restaurante.Services.Interfaces
     public interface ICategoryService
     {
         public CategoryDto CreateCategory(CreateCategoryDto category, int loggedRestaurantId);
-        public CategoryDto UpdateCategory(UpdateCategoryDto category);
+        public CategoryDto UpdateCategory(UpdateCategoryDto category, int restaurantId);
         public CategoryDto GetCategory(int id);
         public bool DeleteCategory(int id);
         public List<CategoryDto> GetCategoriesByRestaurant(int restaurantId);
+        public int GetRestaurantId(int idProducto);
     }
 }

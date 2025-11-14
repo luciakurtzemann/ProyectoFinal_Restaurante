@@ -43,6 +43,16 @@ namespace ProyectoFinal_Restaurante.Repositories.Implementations
             return null;
         }
 
+        public int GetRestaurantId(int idCategoria)
+        {
+            var categoria = _categories.FirstOrDefault(x => x.CategoryId == idCategoria);
+            if (categoria != null)
+            {
+                return categoria.RestaurantId;
+            }
+            return 0;
+        }
+
 
         public static List<Category> _categories = new List<Category>
         {

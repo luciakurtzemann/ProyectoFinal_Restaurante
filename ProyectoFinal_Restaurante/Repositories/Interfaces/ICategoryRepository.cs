@@ -9,5 +9,6 @@ namespace ProyectoFinal_Restaurante.Repositories.Interfaces
         public Category GetCategory (int id);
         public Category DeleteCategory (int id);
         public List<Category> GetCategoriesByRestaurant(int restaurantId);
+        public int GetRestaurantId(int idProducto);
     }
 }

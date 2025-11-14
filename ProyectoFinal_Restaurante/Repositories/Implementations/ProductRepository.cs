@@ -121,7 +121,7 @@ namespace ProyectoFinal_Restaurante.Repositories.Implementations
             {
                 return producto.RestaurantId;
             }
-            return null;
+            return 0;
         }
 
 

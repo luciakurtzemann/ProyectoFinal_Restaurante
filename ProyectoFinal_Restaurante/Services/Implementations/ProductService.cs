@@ -255,7 +255,12 @@ namespace ProyectoFinal_Restaurante.Services.Implementations
 
         public int GetRestaurantId(int idProducto)
         {
-            return _productRepository.GetRestaurantId(idProducto);
+            var restaurantId =  _productRepository.GetRestaurantId(idProducto);
+            if (restaurantId != 0)
+            {
+                return restaurantId;
+            }
+            throw new Exception("Restaurante o producto incorrecto");
         }
     }
 }

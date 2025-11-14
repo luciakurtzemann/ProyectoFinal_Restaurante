@@ -1,6 +1,9 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using ProyectoFinal_Restaurante.Models.DTOs.Requests;
 using ProyectoFinal_Restaurante.Services.Interfaces;
+using System.Security.Claims;
 
 namespace ProyectoFinal_Restaurante.Controllers
 {
@@ -12,6 +15,42 @@ namespace ProyectoFinal_Restaurante.Controllers
         public CategoriesController (ICategoryService categoryService)
         {
             _categoryService = categoryService;
+        }
+        [HttpGet]
+        public IActionResult GetAllCategoriesByRestaurant(int restaurantId)
+        {
+            var listaCategoriasRestaurante = _categoryService.GetCategoriesByRestaurant(restaurantId);
+            return Ok (listaCategoriasRestaurante);
+        }
+
+        [HttpGet("{id}")]
+        public IActionResult GetCategoryById (int id)
+        {
+            try
+            {
+                var categoria = _categoryService.GetCategory(id);
+                return Ok(categoria);
+            }
+            catch (Exception ex) 
+            {
+                return NotFound(ex.Message);
+            }
+        }
+
+        [HttpPut]
+        [Authorize]
+        public IActionResult UpdateCategory([FromBody]UpdateCategoryDto dto)
+        {
+            try
+            {
+                int restaurantId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value ?? "0");
+                var categoriaActualizada = _categoryService.UpdateCategory(dto, restaurantId);
+                return Ok(categoriaActualizada);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }
