@@ -52,5 +52,26 @@ namespace ProyectoFinal_Restaurante.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpPost]
+        [Authorize]
+        public IActionResult CrearCategoria(CreateCategoryDto dto)
+        {
+            int restaurantId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value ?? "0");
+            var categoriaCreada = _categoryService.CreateCategory(dto, restaurantId);
+            return Ok(categoriaCreada);
+        }
+
+        [HttpDelete]
+        [Authorize]
+        public IActionResult EliminarCategoria ([FromBody] int categoryId)
+        {
+            var exisoso = _categoryService.DeleteCategory(categoryId);
+            if (exisoso)
+            {
+                return NoContent();
+            }
+            return NotFound();
+        }
     }
 }

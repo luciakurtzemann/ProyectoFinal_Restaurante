@@ -18,14 +18,21 @@ namespace ProyectoFinal_Restaurante.Services.Implementations
 
 
         //MÉTODOS
-        public string ChangePassword(UpdateCredentialsDto updateCredentialsDto)
+        public string ChangePassword(UpdateCredentialsDto updateCredentialsDto, int loggedRestaurant)
         {
-            var changedPassword = _restaurantRepository.ChangePassword(updateCredentialsDto.RestaurantId, updateCredentialsDto.OldPassword, updateCredentialsDto.NewPassword);
-            if (changedPassword != null)
+            if (loggedRestaurant == updateCredentialsDto.RestaurantId)
             {
-                return changedPassword;
+                var changedPassword = _restaurantRepository.ChangePassword(updateCredentialsDto.RestaurantId, updateCredentialsDto.OldPassword, updateCredentialsDto.NewPassword);
+                if (changedPassword != null)
+                {
+                    return changedPassword;
+                }
+                throw new Exception("La contraseña indicada no coincide con la correcta.");
             }
-            throw new Exception("La contraseña indicada no coincide con la correcta.");
+            else
+            {
+                throw new Exception("No se puede cambiar la contraseña de otro restaurante");
+            }
         }
 
         public RestaurantDto CreateRestaurant(CreateRestaurantDto newRestaurant)
@@ -51,40 +58,53 @@ namespace ProyectoFinal_Restaurante.Services.Implementations
             return restaurantResponse;
         }
 
-        public bool DeleteRestaurant(int restaurantId)
+        public bool DeleteRestaurant(int restaurantId, int loggedRestaurant)
         {
-            var restaurantToDelete = _restaurantRepository.DeleteRestaurant(restaurantId);
-            if (restaurantToDelete != null)
+            if (restaurantId == loggedRestaurant)
             {
-                return true;
+                var restaurantToDelete = _restaurantRepository.DeleteRestaurant(restaurantId);
+                if (restaurantToDelete != null)
+                {
+                    return true;
+                }
+                return false;
             }
-            return false;
+            throw new Exception("No se puede eliminar una cuenta que no sea propia");
         }
 
-        public RestaurantDto UpdateRestaurant(UpdateRestaurantDto restaurant)       //VER LO DE CONTRASEÑA y NAME (CREDENCIALES)
+        public RestaurantDto UpdateRestaurant(UpdateRestaurantDto restaurant, int loggedRestaurant)       //VER LO DE CONTRASEÑA y NAME (CREDENCIALES)
         {
-            Restaurant restaurantToUpdate = new Restaurant()
+            if (loggedRestaurant == restaurant.RestaurantId)
             {
-                Name = restaurant.Name,
-                Email = restaurant.Email,
-                Password = restaurant.Password,
-                Phone = restaurant.Phone,
-                Address = restaurant.Address,
-            };
-            Restaurant updatedRestaurant = _restaurantRepository.UpdateRestaurant(restaurantToUpdate);
-            if (updatedRestaurant != null)
-            {
-                RestaurantDto restaurantResponse = new RestaurantDto()
+                Restaurant restaurantToUpdate = new Restaurant()
                 {
-                    RestaurantId = updatedRestaurant.RestaurantId,
-                    Name = updatedRestaurant.Name,
-                    Email = updatedRestaurant.Email,
-                    Phone = updatedRestaurant.Phone,
-                    Address = updatedRestaurant.Address,
+                    RestaurantId = restaurant.RestaurantId,
+                    Name = restaurant.Name,
+                    Email = restaurant.Email,
+                    Password = restaurant.Password,
+                    Phone = restaurant.Phone,
+                    Address = restaurant.Address,
                 };
-                return restaurantResponse;
+                Restaurant updatedRestaurant = _restaurantRepository.UpdateRestaurant(restaurantToUpdate);
+                if (updatedRestaurant != null)
+                {
+                    RestaurantDto restaurantResponse = new RestaurantDto()
+                    {
+                        RestaurantId = updatedRestaurant.RestaurantId,
+                        Name = updatedRestaurant.Name,
+                        Email = updatedRestaurant.Email,
+                        Phone = updatedRestaurant.Phone,
+                        Address = updatedRestaurant.Address,
+                    };
+                    return restaurantResponse;
+                }
+                throw new Exception("El restaurante a actualizar no existe");
             }
-            throw new Exception("El restaurante a actualizar no existe");
+            else
+            {
+                throw new Exception("No se puede eliminar un restaurante que no sea propio.");
+            }
+            
         }
     }
 }

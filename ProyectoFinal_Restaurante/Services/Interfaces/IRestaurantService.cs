@@ -7,8 +7,8 @@ namespace ProyectoFinal_Restaurante.Services.Interfaces
     public interface IRestaurantService
     {
         public RestaurantDto CreateRestaurant(CreateRestaurantDto newRestaurant);
-        public RestaurantDto UpdateRestaurant(UpdateRestaurantDto restaurant);
-        public bool DeleteRestaurant(int restaurantId);
-        public string ChangePassword(int restaurantId, string oldPassword, string newPassword);
+        public RestaurantDto UpdateRestaurant(UpdateRestaurantDto restaurant, int loggedRestaurant);
+        public bool DeleteRestaurant(int restaurantId, int loggedRestaurant);
+        public string ChangePassword(UpdateCredentialsDto updateCredentialsDto, int loggedRestaurant);
     }
 }

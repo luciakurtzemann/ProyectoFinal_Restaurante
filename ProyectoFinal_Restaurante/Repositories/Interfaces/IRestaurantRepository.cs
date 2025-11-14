@@ -8,6 +8,6 @@ namespace ProyectoFinal_Restaurante.Repositories.Interfaces
         public Restaurant CreateRestaurant (Restaurant newRestaurant);
         public Restaurant UpdateRestaurant (Restaurant restaurant);
         public Restaurant DeleteRestaurant(int restaurantId);
-        public string ChangePassword(UpdateCredentialsDto updateCredentialsDto);
+        public string ChangePassword(int restaurantId, string oldPassword, string newPassword);
     }
 }

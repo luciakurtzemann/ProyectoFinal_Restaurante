@@ -99,8 +99,6 @@ namespace ProyectoFinal_Restaurante.Services.Implementations
                 throw new Exception("La categoría que se quiere actualizar no existe");
             }
             throw new Exception("No se puede modificar una categoria de otro restaurante");
-            
-            
         }
 
         public int GetRestaurantId(int idProducto)

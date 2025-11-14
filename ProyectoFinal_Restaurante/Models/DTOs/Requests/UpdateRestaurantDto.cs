@@ -4,6 +4,7 @@ namespace ProyectoFinal_Restaurante.Models.DTOs.Requests
 {
     public class UpdateRestaurantDto
     {
+        public int RestaurantId { get; set; }
         public string Name { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
