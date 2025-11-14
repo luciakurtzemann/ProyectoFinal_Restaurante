@@ -18,10 +18,14 @@ namespace ProyectoFinal_Restaurante.Services.Implementations
 
 
         //MÉTODOS
-        public string ChangePassword(int restaurantId, string newPassword)
+        public string ChangePassword(UpdateCredentialsDto updateCredentialsDto)
         {
-            throw new NotImplementedException();
-            //terminar, PREGUNTAR A MATEO
+            var changedPassword = _restaurantRepository.ChangePassword(updateCredentialsDto.RestaurantId, updateCredentialsDto.OldPassword, updateCredentialsDto.NewPassword);
+            if (changedPassword != null)
+            {
+                return changedPassword;
+            }
+            throw new Exception("La contraseña indicada no coincide con la correcta.");
         }
 
         public RestaurantDto CreateRestaurant(CreateRestaurantDto newRestaurant)

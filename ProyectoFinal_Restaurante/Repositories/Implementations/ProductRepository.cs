@@ -69,13 +69,17 @@ namespace ProyectoFinal_Restaurante.Repositories.Implementations
             }
         }
 
-        public double ModifyDiscount(int idProducto, double newDiscount)
+        public bool ModifyDiscount(int idProducto, double newDiscount)
         {
             var product = GetProductById(idProducto);
-            product.Discount = newDiscount;
+            if (product != null)
+            {
+                product.Discount = newDiscount;
+                return true;
+            }
+            return false;
             //    _context.Products.Update(product);
             //    _context.SaveChanges();
-            return newDiscount;
 
         }
 
@@ -106,6 +110,16 @@ namespace ProyectoFinal_Restaurante.Repositories.Implementations
                 productToUpdate.HappyHour = product.HappyHour;
                 //save changes
                 return productToUpdate;
+            }
+            return null;
+        }
+
+        public int GetRestaurantId (int idProducto)
+        {
+            var producto = _products.FirstOrDefault(x => x.ProductId == idProducto);
+            if (producto != null)
+            {
+                return producto.RestaurantId;
             }
             return null;
         }

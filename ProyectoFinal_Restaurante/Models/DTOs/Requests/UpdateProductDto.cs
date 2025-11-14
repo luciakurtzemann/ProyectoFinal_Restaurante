@@ -6,6 +6,7 @@ namespace ProyectoFinal_Restaurante.Models.DTOs.Requests
 {
     public class UpdateProductDto
     {
+        public int ProductId { get; set; }
         public string ProductName { get; set; }
         public string ProductDescription { get; set; }
         public double Price { get; set; }

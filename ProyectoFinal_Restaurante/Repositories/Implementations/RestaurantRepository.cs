@@ -32,17 +32,20 @@ namespace ProyectoFinal_Restaurante.Repositories.Implementations
             return null;
         }
 
-        public string ChangePassword(int restaurantId, string newPassword)
+        public string ChangePassword(int restaurantId, string oldPassword, string newPassword)
         {
             var restaurantToChangePassword = _restaurants.FirstOrDefault(x => x.RestaurantId == restaurantId);
 
             if(restaurantToChangePassword != null)
             {
-                restaurantToChangePassword.Password = newPassword;
-                //savechanges
+                if (restaurantToChangePassword.Password == oldPassword)
+                {
+                    restaurantToChangePassword.Password = newPassword;
+                    //savechanges
+                }
                 return restaurantToChangePassword.Password;
             }
-            throw new Exception("Restaurante no encontrado");
+            return null;
         }
 
 
