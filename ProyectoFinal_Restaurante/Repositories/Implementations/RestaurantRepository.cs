@@ -11,16 +11,11 @@ namespace ProyectoFinal_Restaurante.Repositories.Implementations
             return newRestaurant;
         }
 
-        public bool DeleteRestaurant(int restaurantId)
+        public Restaurant DeleteRestaurant(int restaurantId)
         {
             var restaurantToDelete = _restaurants.FirstOrDefault(x => x.RestaurantId == restaurantId);
-            if (restaurantToDelete != null)
-            {
-                _restaurants.Remove(restaurantToDelete);
-                return true;
-            }
-            return false;
-            //throw new Exception("Restaurante no encontrado");
+            _restaurants.Remove(restaurantToDelete);
+            return restaurantToDelete;
         }
 
         public Restaurant UpdateRestaurant(Restaurant restaurant)
@@ -34,7 +29,7 @@ namespace ProyectoFinal_Restaurante.Repositories.Implementations
                 restaurantToUpdate.Phone = restaurant.Phone;
                 return restaurantToUpdate;
             }
-            throw new Exception("Restaurante no encontrado");
+            return null;
         }
 
         public string ChangePassword(int restaurantId, string newPassword)

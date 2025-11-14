@@ -11,18 +11,11 @@ namespace ProyectoFinal_Restaurante.Repositories.Implementations
             return product;
         }
 
-        public bool DeleteProduct(int productId)
+        public Product DeleteProduct(int productId)
         {
             var productAEliminar = _products.FirstOrDefault(p => p.ProductId == productId);
-            if (productAEliminar == null)
-            {
-                return false;
-            }
-            else
-            {
-                _products.Remove(productAEliminar);
-                return true;
-            }
+            _products.Remove(productAEliminar);
+            return productAEliminar;
         }
 
         public List<Product> GetAllProducts()
@@ -33,60 +26,36 @@ namespace ProyectoFinal_Restaurante.Repositories.Implementations
         public Product GetProductById(int productId)
         {
             var product = _products.FirstOrDefault(x => x.ProductId == productId);
-            if (product == null)
-            {
-                throw new Exception ("Producto no encontrado");
-            }
             return product;
         }
 
         public List<Product> GetProductsByCategory(int categoryId)
         {
             List<Product> listadoProductsByCategory = _products.Where(x=> x.CategoryId == categoryId).ToList();
-            if (listadoProductsByCategory.Count == 0)
-            {
-                throw new Exception("La categoría seleccionada no tiene productos.");
-            }
             return listadoProductsByCategory;
         }
 
         public List<Product> GetProductsByRestaurant(int restaurantId)
         {
             List<Product> listadoProductByRestaurant = _products.Where(x => x.RestaurantId == restaurantId).ToList();
-            if (listadoProductByRestaurant.Count == 0)
-            {
-                throw new Exception("El restaurante seleccionado no tiene productos.");
-            }
             return listadoProductByRestaurant;
         }
 
         public List<Product> GetProductsFavorite()
         {
             List<Product> listadoProductFavorite = _products.Where( x => x.IsFavorite == true ).ToList();
-            if (listadoProductFavorite.Count == 0)
-            {
-                throw new Exception("Actualmente no hay productos marcados como favoritos.");
-            }
             return listadoProductFavorite;
         }
 
         public List<Product> GetProductsHappyHour()
         {
             List<Product> listadoProductHappyHour = _products.Where(x => x.HappyHour == true).ToList();
-            if (listadoProductHappyHour.Count == 0)
-            {
-                throw new Exception("Actualmente no hay productos con Happy Hour.");
-            }
             return listadoProductHappyHour;
         }
 
         public List<Product> GetProductsWithDiscount()
         {
             List<Product> listadoProductsWithDiscount = _products.Where( x => x.Discount != 0).ToList();
-            if (listadoProductsWithDiscount.Count == 0)
-            {
-                throw new Exception("Actualmente no hay productos con descuento.");
-            }
             return listadoProductsWithDiscount;
         }
 
@@ -128,20 +97,17 @@ namespace ProyectoFinal_Restaurante.Repositories.Implementations
         {
             var productToUpdate = _products.FirstOrDefault(x=> x.ProductId == product.ProductId);
 
-            if (productToUpdate == null)
-            {
-                throw new Exception("Producto no encontrado");
-            }
-            else
+            if (productToUpdate != null)
             {
                 productToUpdate.ProductName = product.ProductName;
                 productToUpdate.ProductDescription = product.ProductDescription;
                 productToUpdate.Price = product.Price;
                 productToUpdate.Discount = product.Discount;
-                productToUpdate.HappyHour = product.HappyHour; 
+                productToUpdate.HappyHour = product.HappyHour;
                 //save changes
                 return productToUpdate;
             }
+            return null;
         }
 
 

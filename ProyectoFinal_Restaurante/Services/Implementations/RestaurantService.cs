@@ -21,7 +21,7 @@ namespace ProyectoFinal_Restaurante.Services.Implementations
         public string ChangePassword(int restaurantId, string newPassword)
         {
             throw new NotImplementedException();
-            //terminar
+            //terminar, PREGUNTAR A MATEO
         }
 
         public RestaurantDto CreateRestaurant(CreateRestaurantDto newRestaurant)
@@ -38,20 +38,26 @@ namespace ProyectoFinal_Restaurante.Services.Implementations
 
             RestaurantDto restaurantResponse = new RestaurantDto()
             {
-                Name = newRestaurant.Name,
-                Email = newRestaurant.Email,
-                Phone = newRestaurant.Phone,
-                Address = newRestaurant.Address,
+                RestaurantId = restaurantCreated.RestaurantId,
+                Name = restaurantCreated.Name,
+                Email = restaurantCreated.Email,
+                Phone = restaurantCreated.Phone,
+                Address = restaurantCreated.Address,
             };
             return restaurantResponse;
         }
 
         public bool DeleteRestaurant(int restaurantId)
         {
-            return _restaurantRepository.DeleteRestaurant(restaurantId);
+            var restaurantToDelete = _restaurantRepository.DeleteRestaurant(restaurantId);
+            if (restaurantToDelete != null)
+            {
+                return true;
+            }
+            return false;
         }
 
-        public RestaurantDto UpdateRestaurant(UpdateRestaurantDto restaurant)       //VER LO DE CONTRASEÑA
+        public RestaurantDto UpdateRestaurant(UpdateRestaurantDto restaurant)       //VER LO DE CONTRASEÑA y NAME (CREDENCIALES)
         {
             Restaurant restaurantToUpdate = new Restaurant()
             {
@@ -62,15 +68,19 @@ namespace ProyectoFinal_Restaurante.Services.Implementations
                 Address = restaurant.Address,
             };
             Restaurant updatedRestaurant = _restaurantRepository.UpdateRestaurant(restaurantToUpdate);
-
-            RestaurantDto restaurantResponse = new RestaurantDto()
+            if (updatedRestaurant != null)
             {
-                Name = updatedRestaurant.Name,
-                Email = updatedRestaurant.Email,
-                Phone = updatedRestaurant.Phone,
-                Address = updatedRestaurant.Address,
-            };
-            return restaurantResponse;
+                RestaurantDto restaurantResponse = new RestaurantDto()
+                {
+                    RestaurantId = updatedRestaurant.RestaurantId,
+                    Name = updatedRestaurant.Name,
+                    Email = updatedRestaurant.Email,
+                    Phone = updatedRestaurant.Phone,
+                    Address = updatedRestaurant.Address,
+                };
+                return restaurantResponse;
+            }
+            throw new Exception("El restaurante a actualizar no existe");
         }
     }
 }

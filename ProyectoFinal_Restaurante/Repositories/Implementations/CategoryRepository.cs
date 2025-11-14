@@ -11,40 +11,22 @@ namespace ProyectoFinal_Restaurante.Repositories.Implementations
             return category;
         }
 
-        public bool DeleteCategory(int id)
+        public Category DeleteCategory(int id)
         {
             var categoryToDelete = _categories.FirstOrDefault(x => x.CategoryId == id);
-            if (categoryToDelete == null)
-            {
-                return false;
-            }
-            else
-            {
-                _categories.Remove(categoryToDelete);
-                return true;
-            }
+            _categories.Remove(categoryToDelete);
+            return categoryToDelete;
         }
 
         public Category GetCategory(int id)
         {
             var category = _categories.FirstOrDefault(x=>x.CategoryId == id);
-            if (category == null)
-            {
-                throw new Exception("Categoría no encontrada");
-            }
-            else
-            {
-                return category;
-            }
+            return category;
         }
 
         public List<Category> GetCategoriesByRestaurant(int restaurantId)
         {
             List<Category> listadoCategoryByRestaurant = _categories.Where(x => x.RestaurantId ==  restaurantId).ToList();
-            if (listadoCategoryByRestaurant.Count == 0)
-            {
-                throw new Exception("El restaurante seleccionado no tiene categorias.");
-            }
             return listadoCategoryByRestaurant;
         }
 
@@ -52,16 +34,13 @@ namespace ProyectoFinal_Restaurante.Repositories.Implementations
         {
             var categoryToUpdate = _categories.FirstOrDefault(x => x.CategoryId ==  category.CategoryId);
 
-            if (categoryToUpdate == null)
-            {
-                throw new Exception("Categoría no encontrada");
-            }
-            else
+            if (categoryToUpdate != null)
             {
                 categoryToUpdate.CategoryName = category.CategoryName;
                 return categoryToUpdate;
                 //save changes
             }
+            return null;
         }
 
 

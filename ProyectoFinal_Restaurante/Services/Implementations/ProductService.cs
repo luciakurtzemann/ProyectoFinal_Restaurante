@@ -33,6 +33,7 @@ namespace ProyectoFinal_Restaurante.Services.Implementations
 
             ProductDto productResponseDto = new ProductDto()
             {
+                ProductId = product.ProductId,
                 ProductName = product.ProductName,
                 ProductDescription = product.ProductDescription,
                 Price = product.Price,
@@ -49,13 +50,19 @@ namespace ProyectoFinal_Restaurante.Services.Implementations
 
         public bool DeleteProduct(int productId)
         {
-            return _productRepository.DeleteProduct(productId);
+            var productToDelete = _productRepository.DeleteProduct(productId);
+            if (productToDelete == null)
+            {
+                return false;
+            }
+            return true;
         }
 
         public List<ProductDto> GetAllProducts()
         {
             var listaProductsDto = _productRepository.GetAllProducts().Select( product => new ProductDto()
             {
+                ProductId = product.ProductId,
                 ProductName = product.ProductName,
                 ProductDescription = product.ProductDescription,
                 Price = product.Price,
@@ -72,41 +79,60 @@ namespace ProyectoFinal_Restaurante.Services.Implementations
         {
             Product producto = _productRepository.GetProductById(productId);
 
-            ProductDto productResponse = new ProductDto()
+            if (producto != null)
             {
-                ProductName = producto.ProductName,
-                ProductDescription = producto.ProductDescription,
-                Price = producto.Price,
-                Discount = producto.Discount,
-                HappyHour = producto.HappyHour,
-                IsFavorite = producto.IsFavorite,
-                RestaurantId = producto.RestaurantId,
-                CategoryId = producto.CategoryId,
+                ProductDto productResponse = new ProductDto()
+                {
+                    ProductId = producto.ProductId,
+                    ProductName = producto.ProductName,
+                    ProductDescription = producto.ProductDescription,
+                    Price = producto.Price,
+                    Discount = producto.Discount,
+                    HappyHour = producto.HappyHour,
+                    IsFavorite = producto.IsFavorite,
+                    RestaurantId = producto.RestaurantId,
+                    CategoryId = producto.CategoryId,
 
-            };
-            return productResponse;
+                };
+                return productResponse;
+            }
+            throw new Exception("Producto no encontrado");
         }
 
         public List<ProductDto> GetProductsByCategory(int categoryId)
         {
-            List<ProductDto> listadoProductosPorCategoria= _productRepository.GetProductsByCategory(categoryId).Select(product => new ProductDto()
+            List<Product> listadoProductosPorCategoria = _productRepository.GetProductsByCategory(categoryId);
+            
+            if (listadoProductosPorCategoria.Count !=0)   //
             {
-                ProductName = product.ProductName,
-                ProductDescription = product.ProductDescription,
-                Price = product.Price,
-                Discount = product.Discount,
-                HappyHour = product.HappyHour,
-                IsFavorite = product.IsFavorite,
-                RestaurantId = product.RestaurantId,
-                CategoryId = product.CategoryId,
-            }).ToList(); 
-            return listadoProductosPorCategoria;
+                List<ProductDto> listadoProductosDto = listadoProductosPorCategoria.Select(product => new ProductDto()
+                 {
+                    ProductId=product.ProductId, 
+                    ProductName = product.ProductName,
+                     ProductDescription = product.ProductDescription,
+                     Price = product.Price,
+                     Discount = product.Discount,
+                     HappyHour = product.HappyHour,
+                     IsFavorite = product.IsFavorite,
+                     RestaurantId = product.RestaurantId,
+                     CategoryId = product.CategoryId,
+                 }).ToList();
+                return listadoProductosDto;
+            }
+            throw new Exception("La categoria seleccionada no tiene productos.");
         }
 
         public List<ProductDto> GetProductsByRestaurant(int restaurantId)
         {
-            List<ProductDto> listadoProductosPorRestaurante = _productRepository.GetProductsByRestaurant(restaurantId).Select(product => new ProductDto()
+            List<Product> listadoProductosPorRestaurante = _productRepository.GetProductsByRestaurant(restaurantId);
+
+            if (listadoProductosPorRestaurante.Count == 0)
             {
+                throw new Exception("El restaurante seleccionado no tiene productos.");
+            }
+            List<ProductDto> listadoProductosDto = listadoProductosPorRestaurante.Select(product => new ProductDto()
+            {
+                ProductId = product.ProductId,
                 ProductName = product.ProductName,
                 ProductDescription = product.ProductDescription,
                 Price = product.Price,
@@ -116,13 +142,19 @@ namespace ProyectoFinal_Restaurante.Services.Implementations
                 RestaurantId = product.RestaurantId,
                 CategoryId = product.CategoryId,
             }).ToList();
-            return listadoProductosPorRestaurante;
+            return listadoProductosDto;
         }
 
         public List<ProductDto> GetProductsFavorite()
         {
-            List<ProductDto> listadoProductosFavoritos = _productRepository.GetProductsFavorite().Select(product => new ProductDto()
+            List<Product> listadoProductosFavoritos = _productRepository.GetProductsFavorite();
+            if (listadoProductosFavoritos.Count == 0)
             {
+                throw new Exception("No hay productos seleccionados como favoritos.");
+            }
+            List<ProductDto> listadoProductosDto = listadoProductosFavoritos.Select(product => new ProductDto()
+            {
+                ProductId= product.ProductId,
                 ProductName = product.ProductName,
                 ProductDescription = product.ProductDescription,
                 Price = product.Price,
@@ -132,13 +164,20 @@ namespace ProyectoFinal_Restaurante.Services.Implementations
                 RestaurantId = product.RestaurantId,
                 CategoryId = product.CategoryId,
             }).ToList();
-            return listadoProductosFavoritos;
+            return listadoProductosDto;
         }
 
         public List<ProductDto> GetProductsHappyHour()
         {
-            List<ProductDto> listadoProductosHappyHour = _productRepository.GetProductsHappyHour().Select(product => new ProductDto()
+            List<Product> listadoProductosHappyHour = _productRepository.GetProductsHappyHour();
+
+            if(listadoProductosHappyHour.Count == 0)
             {
+                throw new Exception("No hay productos con Happy Hour.");
+            }
+            List<ProductDto> listadoProductosDto = listadoProductosHappyHour.Select(product => new ProductDto()
+            {
+                ProductId = product.ProductId,
                 ProductName = product.ProductName,
                 ProductDescription = product.ProductDescription,
                 Price = product.Price,
@@ -148,14 +187,20 @@ namespace ProyectoFinal_Restaurante.Services.Implementations
                 RestaurantId = product.RestaurantId,
                 CategoryId = product.CategoryId,
             }).ToList();
-            return listadoProductosHappyHour;
+            return listadoProductosDto;
         }
 
         public List<ProductDto> GetProductsWithDiscount()
         {
-            List<ProductDto> listadoProductosDescuento = _productRepository.GetProductsWithDiscount()
+            List<Product> listadoProductosDescuento = _productRepository.GetProductsWithDiscount();
+            if(listadoProductosDescuento.Count == 0)
+            {
+                throw new Exception("No hay productos con Descuento.");
+            }
+            List<ProductDto> listadoProductosDto = listadoProductosDescuento
                 .Select(product => new ProductDto()
             {
+                ProductId=product.ProductId,
                 ProductName = product.ProductName,
                 ProductDescription = product.ProductDescription,
                 Price = product.Price,
@@ -165,13 +210,12 @@ namespace ProyectoFinal_Restaurante.Services.Implementations
                 RestaurantId = product.RestaurantId,
                 CategoryId = product.CategoryId,
             }).ToList();
-            return listadoProductosDescuento;
+            return listadoProductosDto;
         }
 
         public void IncrementPriceByRestaurant(double increment, int restaurantId)
         {
             _productRepository.IncrementPriceByRestaurant(increment, restaurantId);
-            //chequear esto
         }
 
         public ProductDto ModifyDiscount(int idProducto, double discount)
@@ -197,18 +241,23 @@ namespace ProyectoFinal_Restaurante.Services.Implementations
             };
             Product productUpdated = _productRepository.UpdateProduct(product);
 
-            ProductDto productResponseDto = new ProductDto()
+            if (productUpdated != null)
             {
-                ProductName = productUpdated.ProductName,
-                ProductDescription = productUpdated.ProductDescription,
-                Price = productUpdated.Price,
-                Discount = productUpdated.Discount,
-                HappyHour = productUpdated.HappyHour,
-                IsFavorite = productUpdated.IsFavorite,
-                RestaurantId = productUpdated.RestaurantId,
-                CategoryId = productUpdated.CategoryId,
-            };
-            return productResponseDto;
+                ProductDto productResponseDto = new ProductDto()
+                {
+                    ProductId = productUpdated.ProductId,
+                    ProductName = productUpdated.ProductName,
+                    ProductDescription = productUpdated.ProductDescription,
+                    Price = productUpdated.Price,
+                    Discount = productUpdated.Discount,
+                    HappyHour = productUpdated.HappyHour,
+                    IsFavorite = productUpdated.IsFavorite,
+                    RestaurantId = productUpdated.RestaurantId,
+                    CategoryId = productUpdated.CategoryId,
+                };
+                return productResponseDto;
+            }
+            throw new Exception("El producto que se busca actualizar no existe.");
         }
     }
 }

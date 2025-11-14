@@ -29,6 +29,7 @@ namespace ProyectoFinal_Restaurante.Services.Implementations
 
             CategoryDto categoryResponse = new CategoryDto()
             {
+                CategoryId = createdCategory.CategoryId,
                 CategoryName = createdCategory.CategoryName,
                 RestaurantId = createdCategory.RestaurantId
             };
@@ -37,29 +38,46 @@ namespace ProyectoFinal_Restaurante.Services.Implementations
 
         public bool DeleteCategory(int id)
         {
-            return _categoryRepository.DeleteCategory(id);
+            var categoryToDelete = _categoryRepository.DeleteCategory(id);
+            if (categoryToDelete != null)
+            {
+                return true;
+            }
+            return false;
         }
 
         public List<CategoryDto> GetCategoriesByRestaurant(int restaurantId)
         {
-            List<CategoryDto> listadoCategoryPorRestaurantDto = _categoryRepository.GetCategoriesByRestaurant(restaurantId)
+            List<Category> listadoCategoryPorRestaurantDto = _categoryRepository.GetCategoriesByRestaurant(restaurantId);
+            if (listadoCategoryPorRestaurantDto.Count == 0)
+            {
+                throw new Exception("El restaurante seleccionado no tiene categorías");
+            }
+            List<CategoryDto> listadoCategoryDto = _categoryRepository.GetCategoriesByRestaurant(restaurantId)
                 .Select(category => new CategoryDto()
                 {
+                    CategoryId = category.CategoryId,
                     CategoryName = category.CategoryName,
                     RestaurantId = category.RestaurantId
                 }).ToList();
-            return listadoCategoryPorRestaurantDto;
+            return listadoCategoryDto;
         }
 
         public CategoryDto GetCategory(int id)
         {
             Category categoria = _categoryRepository.GetCategory(id);
-            CategoryDto categoriaResponse = new CategoryDto()
+            if (categoria != null)
             {
-                CategoryName = categoria.CategoryName,
-                RestaurantId = categoria.RestaurantId
-            };
-            return categoriaResponse;
+                CategoryDto categoriaResponse = new CategoryDto()
+                {
+                    CategoryId = categoria.CategoryId,
+                    CategoryName = categoria.CategoryName,
+                    RestaurantId = categoria.RestaurantId
+                };
+                return categoriaResponse;
+            }
+            throw new Exception("La categoría buscada no existe.");
+ 
         }
 
         public CategoryDto UpdateCategory(UpdateCategoryDto category)       //CHEQUEAR
@@ -70,12 +88,18 @@ namespace ProyectoFinal_Restaurante.Services.Implementations
             };
             Category categoryUpdated = _categoryRepository.UpdateCategory(categoryToUpdate);
 
-            CategoryDto categoryResponse = new CategoryDto()
+            if (categoryUpdated != null)
             {
-                CategoryName=categoryUpdated.CategoryName,
-                RestaurantId=categoryUpdated.RestaurantId,
-            };
-            return categoryResponse;
+                CategoryDto categoryResponse = new CategoryDto()
+                {
+                    CategoryId = categoryUpdated.CategoryId,
+                    CategoryName = categoryUpdated.CategoryName,
+                    RestaurantId = categoryUpdated.RestaurantId,
+                };
+                return categoryResponse;
+            }
+            throw new Exception("La categoría que se quiere actualizar no existe");
+            
         }
     }
 }
