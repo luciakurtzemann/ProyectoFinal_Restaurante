@@ -1,4 +1,5 @@
 ﻿using ProyectoFinal_Restaurante.Entities;
+using ProyectoFinal_Restaurante.Exceptions;
 using ProyectoFinal_Restaurante.Models.DTOs.Requests;
 using ProyectoFinal_Restaurante.Models.DTOs.Responses;
 using ProyectoFinal_Restaurante.Repositories.Implementations;
@@ -71,11 +72,11 @@ namespace ProyectoFinal_Restaurante.Services.Implementations
                 };
                 return categoriaResponse;
             }
-            throw new Exception("La categoría buscada no existe.");
+            throw new NotFoundException("La categoría buscada no existe.");
  
         }
 
-        public CategoryDto UpdateCategory(UpdateCategoryDto category, int restaurantId)       //CHEQUEAR
+        public CategoryDto UpdateCategory(UpdateCategoryDto category, int restaurantId)
         {
             var categoryRepo = _categoryRepository.GetCategory(category.categoryId);
             if(categoryRepo.RestaurantId == restaurantId)
@@ -96,7 +97,7 @@ namespace ProyectoFinal_Restaurante.Services.Implementations
                     };
                     return categoryResponse;
                 }
-                throw new Exception("La categoría que se quiere actualizar no existe");
+                throw new NotFoundException("La categoría que se quiere actualizar no existe");
             }
             throw new Exception("No se puede modificar una categoria de otro restaurante");
         }

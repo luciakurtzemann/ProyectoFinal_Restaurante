@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using ProyectoFinal_Restaurante.Exceptions;
 using ProyectoFinal_Restaurante.Models.DTOs.Requests;
 using ProyectoFinal_Restaurante.Services.Interfaces;
 using System.Security.Claims;
@@ -31,7 +32,7 @@ namespace ProyectoFinal_Restaurante.Controllers
                 var categoria = _categoryService.GetCategory(id);
                 return Ok(categoria);
             }
-            catch (Exception ex) 
+            catch (NotFoundException ex) 
             {
                 return NotFound(ex.Message);
             }
@@ -46,6 +47,10 @@ namespace ProyectoFinal_Restaurante.Controllers
                 int restaurantId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value ?? "0");
                 var categoriaActualizada = _categoryService.UpdateCategory(dto, restaurantId);
                 return Ok(categoriaActualizada);
+            }
+            catch(NotFoundException ex)
+            {
+                return NotFound(ex.Message);
             }
             catch (Exception ex)
             {

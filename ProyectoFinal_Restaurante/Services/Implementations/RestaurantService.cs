@@ -1,4 +1,5 @@
 ﻿using ProyectoFinal_Restaurante.Entities;
+using ProyectoFinal_Restaurante.Exceptions;
 using ProyectoFinal_Restaurante.Models.DTOs.Requests;
 using ProyectoFinal_Restaurante.Models.DTOs.Responses;
 using ProyectoFinal_Restaurante.Repositories.Interfaces;
@@ -27,7 +28,7 @@ namespace ProyectoFinal_Restaurante.Services.Implementations
                 {
                     return changedPassword;
                 }
-                throw new Exception("La contraseña indicada no coincide con la correcta.");
+                throw new NotFoundException("La contraseña indicada no coincide con la correcta.");
             }
             else
             {
@@ -98,7 +99,7 @@ namespace ProyectoFinal_Restaurante.Services.Implementations
                     };
                     return restaurantResponse;
                 }
-                throw new Exception("El restaurante a actualizar no existe");
+                throw new NotFoundException("El restaurante a actualizar no existe");
             }
             else
             {

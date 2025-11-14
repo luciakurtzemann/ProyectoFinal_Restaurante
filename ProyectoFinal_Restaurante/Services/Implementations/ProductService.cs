@@ -1,4 +1,5 @@
 ﻿using ProyectoFinal_Restaurante.Entities;
+using ProyectoFinal_Restaurante.Exceptions;
 using ProyectoFinal_Restaurante.Models.DTOs.Requests;
 using ProyectoFinal_Restaurante.Models.DTOs.Responses;
 using ProyectoFinal_Restaurante.Repositories.Interfaces;
@@ -97,7 +98,7 @@ namespace ProyectoFinal_Restaurante.Services.Implementations
                 };
                 return productResponse;
             }
-            throw new Exception("Producto no encontrado");
+            throw new NotFoundException("Producto no encontrado");
         }
 
         public List<ProductDto> GetProductsByCategory(int categoryId)
@@ -199,7 +200,7 @@ namespace ProyectoFinal_Restaurante.Services.Implementations
                 {
                     return GetProductById(idProducto);
                 }
-                throw new Exception("El ID indicado no corresponde a ningún producto");
+                throw new NotFoundException("El ID indicado no corresponde a ningún producto"); 
             }
             throw new Exception("No se pueden modificar productos de otro restaurante.");
         }
@@ -245,7 +246,7 @@ namespace ProyectoFinal_Restaurante.Services.Implementations
             }
             else if (productoRepo == null) 
             {
-                throw new Exception("El producto buscado no existe");
+                throw new NotFoundException("El producto buscado no existe");  
             }
             else
             {
@@ -260,7 +261,7 @@ namespace ProyectoFinal_Restaurante.Services.Implementations
             {
                 return restaurantId;
             }
-            throw new Exception("Restaurante o producto incorrecto");
+            throw new NotFoundException("Restaurante o producto incorrecto");
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using ProyectoFinal_Restaurante.Exceptions;
 using ProyectoFinal_Restaurante.Models.DTOs.Requests;
 using ProyectoFinal_Restaurante.Services.Interfaces;
 using System.Security.Claims;
@@ -33,7 +34,7 @@ namespace ProyectoFinal_Restaurante.Controllers
                 var productoBuscado = _productService.GetProductById(id);
                 return Ok(productoBuscado);
             }
-            catch (Exception ex)
+            catch (NotFoundException ex)
             {
                 return NotFound(ex.Message);
             }
@@ -93,7 +94,7 @@ namespace ProyectoFinal_Restaurante.Controllers
             {
                 return NoContent();
             }
-            return NotFound("El producto que desea eliminar no existe.");
+            return NotFound("El producto que desea eliminar no existe."); 
         }
 
         [HttpPut("{id}/incrementPrice")]
@@ -128,7 +129,11 @@ namespace ProyectoFinal_Restaurante.Controllers
                 var product = _productService.ModifyDiscount(productId, discount, restaurantId);
                 return Ok(product);
             }
-            catch (Exception ex)                                         ///////////////////////////////////////////////
+            catch (NotFoundException ex)                                         
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
@@ -145,7 +150,11 @@ namespace ProyectoFinal_Restaurante.Controllers
                 var productoModificado = _productService.UpdateProduct(product, restaurantId);
                 return Ok(productoModificado);
             }
-            catch (Exception ex)
+            catch (NotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex) 
             {
                 return BadRequest(ex.Message);
             }
