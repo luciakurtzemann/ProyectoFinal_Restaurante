@@ -1,3 +1,5 @@
+using Microsoft.EntityFrameworkCore;
+using ProyectoFinal_Restaurante.Data;
 using ProyectoFinal_Restaurante.Repositories.Implementations;
 using ProyectoFinal_Restaurante.Repositories.Interfaces;
 using ProyectoFinal_Restaurante.Services.Implementations;
@@ -18,6 +20,8 @@ builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IRestaurantService, RestaurantService>();
 builder.Services.AddScoped<ICategoryService,  CategoryService>();
+
+builder.Services.AddDbContext < ProyectoFinal_RestauranteContext> (dbContextOptions => dbContextOptions.UseSqlite(builder.Configuration["ConnectionStrings:ProyectoFinal_RestauranteDBConnectionString"]));
 
 var app = builder.Build();
 
