@@ -89,12 +89,22 @@ namespace ProyectoFinal_Restaurante.Controllers
         [Authorize]
         public IActionResult DeleteProduct(int id)
         {
-            var eliminado = _productService.DeleteProduct(id);
-            if (eliminado)
+            try
             {
-                return NoContent();
+                int restaurantId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value ?? "0");
+                var eliminado = _productService.DeleteProduct(id, restaurantId);
+                if (eliminado)
+                {
+                    return NoContent();
+                }
+                return NotFound("El producto que desea eliminar no existe.");
             }
-            return NotFound("El producto que desea eliminar no existe."); 
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            
+            
         }
 
         [HttpPut("{id}/incrementPrice")]
@@ -157,6 +167,41 @@ namespace ProyectoFinal_Restaurante.Controllers
             catch (Exception ex) 
             {
                 return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPut("/{id}/disponibilidad")]
+        [Authorize]
+        public IActionResult CambiarDisponibilidadProducto (int productId)
+        {
+            try
+            {
+                int restaurantId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value ?? "0");
+                _productService.ChangeDisponibilidad(productId, restaurantId);
+                return Ok(productId);
+
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(ex.Message) ;
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message );
+            }
+        }
+
+        [HttpPut(("/{id}/cambiarFavorito"))]
+        public IActionResult CambiarFavorito (int productId)
+        {
+            try
+            {
+                _productService.ChangeFavorite(productId);
+                return Ok(productId);
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(ex.Message);
             }
         }
 

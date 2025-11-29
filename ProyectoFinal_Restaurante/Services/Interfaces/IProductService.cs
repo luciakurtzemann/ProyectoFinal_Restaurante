@@ -15,10 +15,12 @@ namespace ProyectoFinal_Restaurante.Services.Interfaces
         public List<ProductDto> GetProductsHappyHour();
         public ProductDto CreateProduct(CreateProductDto productDto, int loggedRestaurantId);
         public ProductDto UpdateProduct(UpdateProductDto productDto, int restaurantId);
-        public bool DeleteProduct(int productId);
+        public bool DeleteProduct(int productId, int loggedRestaurantId);
         public ProductDto ModifyDiscount(int idProducto, double discount, int restaurantId);
         public void IncrementPriceByRestaurant(double increment, int restaurantId);
         public bool ModifyHappyHour(int productId, int restaurantId);
         public int GetRestaurantId(int idProducto);
+        public void ChangeDisponibilidad(int idProducto, int restaurantId);
+        public void ChangeFavorite (int idProducto);
     }
 }

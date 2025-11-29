@@ -14,6 +14,7 @@ namespace ProyectoFinal_Restaurante.Entities
         public double Discount { get; set; } = 0;
         public bool HappyHour { get; set; } = false;
         public bool IsFavorite { get; set; } = false;
+        public bool Agotado { get; set; } = false;
 
         [ForeignKey("RestaurantId")]
         public Restaurant Restaurant { get; set; }

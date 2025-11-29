@@ -49,8 +49,14 @@ namespace ProyectoFinal_Restaurante.Services.Implementations
 
         }
 
-        public bool DeleteProduct(int productId)
+        public bool DeleteProduct(int productId, int loggedRestaurantId)
         {
+            var product = GetProductById(productId);
+            int ownerId = _productRepository.GetRestaurantId(productId);
+            if (ownerId != loggedRestaurantId)
+            {
+                throw new Exception("No puedes borrar productos ajenos.");
+            }
             var productToDelete = _productRepository.DeleteProduct(productId);
             if (productToDelete == null)
             {
@@ -216,7 +222,7 @@ namespace ProyectoFinal_Restaurante.Services.Implementations
 
         public ProductDto UpdateProduct(UpdateProductDto productDto, int restaurantId)
         {
-            var productoRepo = _productRepository.GetProductById(restaurantId);
+            var productoRepo = _productRepository.GetProductById(productDto.ProductId);
             if (productoRepo != null && restaurantId == productoRepo.RestaurantId)
             {
                 Product product = new Product()
@@ -262,6 +268,33 @@ namespace ProyectoFinal_Restaurante.Services.Implementations
                 return restaurantId;
             }
             throw new NotFoundException("Restaurante o producto incorrecto");
+        }
+
+        public void ChangeDisponibilidad(int idProducto, int restaurantId)
+        {
+            if (restaurantId == _productRepository.GetRestaurantId(idProducto))
+            {
+                var producto = GetProductById(idProducto);
+
+                if (producto != null)
+                {
+                    _productRepository.ChangeDisponibilidad(idProducto);
+                    return;
+                }
+                throw new NotFoundException("El producto que busca no existe.");
+            }
+            throw new Exception("No se pueden modificar productos de otro restaurante.");
+            
+        }
+        public void ChangeFavorite(int idProducto)
+        {
+            var producto = GetProductById(idProducto);
+            if (producto != null)
+            {
+                _productRepository.ChangeFavorite(idProducto);
+                return;
+            }
+            throw new NotFoundException("El producto que busca no existe.");
         }
     }
 }

@@ -22,9 +22,14 @@ namespace ProyectoFinal_Restaurante.Repositories.Implementations
         public Category DeleteCategory(int id)
         {
             var categoryToDelete = _context.Categories.FirstOrDefault(x => x.CategoryId == id);
-            _context.Categories.Remove(categoryToDelete);
-            _context.SaveChanges();
-            return categoryToDelete;
+
+            if (categoryToDelete != null)
+            {
+                _context.Categories.Remove(categoryToDelete);
+                _context.SaveChanges();
+                return categoryToDelete;
+            }
+            return null;    
         }
 
         public Category GetCategory(int id)
