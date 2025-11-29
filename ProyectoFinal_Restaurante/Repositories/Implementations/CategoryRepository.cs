@@ -61,52 +61,5 @@ namespace ProyectoFinal_Restaurante.Repositories.Implementations
             }
             return 0;
         }
-
-
-        public static List<Category> _categories = new List<Category>
-        {
-            new Category
-            {
-                CategoryId = 1,
-                CategoryName = "Comidas Rápidas",
-                RestaurantId = 1,
-                Products = new List<Product>() // se puede llenar después si querés
-            },
-            new Category
-            {
-                CategoryId = 2,
-                CategoryName = "Pizzas",
-                RestaurantId = 1,
-                Products = new List<Product>()
-            },
-            new Category
-            {
-                CategoryId = 3,
-                CategoryName = "Cafetería",
-                RestaurantId = 2,
-                Products = new List<Product>()
-            },
-            new Category
-            {
-                CategoryId = 4,
-                CategoryName = "Bebidas Frías",
-                RestaurantId = 2,
-                Products = new List<Product>()
-            },
-            new Category
-            {
-                CategoryId = 5,
-                CategoryName = "Mexicana",
-                RestaurantId = 3,
-                Products = new List<Product>()
-            },
-            new Category
-            {
-                CategoryId = 6,
-                CategoryName = "Ensaladas",
-                RestaurantId = 3,
-                Products = new List<Product>()
-            }
-        };
     }
 }

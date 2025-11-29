@@ -57,44 +57,9 @@ namespace ProyectoFinal_Restaurante.Repositories.Implementations
             return null;
         }
 
-
-        public static List<Restaurant> _restaurants = new List<Restaurant>
+        public Restaurant? GetByEmail(string email)
         {
-            new Restaurant
-            {
-                RestaurantId = 1,
-                Name = "Burger House",
-                Email = "contacto@burgerhouse.com",
-                Password = "burger123", // solo testing
-                Phone = 1122334455,
-                Address = "Av. Libertador 1234",
-                Categories = new List<Category>(),
-                Products = new List<Product>()
-            },
-            new Restaurant
-            {
-                RestaurantId = 2,
-                Name = "Café Central",
-                Email = "info@cafecentral.com",
-                Password = "cafe2024", // solo testing
-                Phone = 1144556677,
-                Address = "Calle Belgrano 789",
-                Categories = new List<Category>(),
-                Products = new List<Product>()
-            },
-            new Restaurant
-            {
-                RestaurantId = 3,
-                Name = "Mexicana Viva",
-                Email = "hola@mexicanaviva.com",
-                Password = "mexico99", // solo testing
-                Phone = 1133221100,
-                Address = "San Martín 456",
-                Categories = new List<Category>(),
-                Products = new List<Product>()
-            }
-        };
-
-
+            return _context.Restaurants.FirstOrDefault(restaurant => restaurant.Email.ToLower() == email.ToLower());
+        }
     }
 }

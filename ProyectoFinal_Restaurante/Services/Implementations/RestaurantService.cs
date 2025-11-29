@@ -107,5 +107,20 @@ namespace ProyectoFinal_Restaurante.Services.Implementations
             }
             
         }
+
+        public Restaurant? Authenticate(string email, string password)
+        {
+            var restaurant = _restaurantRepository.GetByEmail (email);
+
+            if (restaurant == null)
+            {
+                return null;
+            }
+            if (restaurant.Password == password)
+            {
+                return restaurant;
+            }
+            return null;
+        }
     }
 }
