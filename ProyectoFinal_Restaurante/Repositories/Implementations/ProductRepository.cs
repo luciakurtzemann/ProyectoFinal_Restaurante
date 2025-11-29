@@ -1,72 +1,82 @@
-﻿using ProyectoFinal_Restaurante.Entities;
+﻿using ProyectoFinal_Restaurante.Data;
+using ProyectoFinal_Restaurante.Entities;
 using ProyectoFinal_Restaurante.Repositories.Interfaces;
 
 namespace ProyectoFinal_Restaurante.Repositories.Implementations
 {
     public class ProductRepository : IProductRepository
     {
+        private readonly ProyectoFinal_RestauranteContext _context;
+
+        public ProductRepository (ProyectoFinal_RestauranteContext context)
+        {
+            _context = context;
+        }
+
         public Product CreateProduct(Product product)
         {
-            _products.Add(product);
+            _context.Products.Add(product);
+            _context.SaveChanges();
             return product;
         }
 
         public Product DeleteProduct(int productId)
         {
-            var productAEliminar = _products.FirstOrDefault(p => p.ProductId == productId);
-            _products.Remove(productAEliminar);
+            var productAEliminar = _context.Products.FirstOrDefault(p => p.ProductId == productId);
+            _context.Products.Remove(productAEliminar);
+            _context.SaveChanges();
             return productAEliminar;
         }
 
         public List<Product> GetAllProducts()
         {
-            return _products;
+            return _context.Products.ToList();
         }
 
         public Product GetProductById(int productId)
         {
-            var product = _products.FirstOrDefault(x => x.ProductId == productId);
+            var product = _context.Products.FirstOrDefault(x => x.ProductId == productId);
             return product;
         }
 
         public List<Product> GetProductsByCategory(int categoryId)
         {
-            List<Product> listadoProductsByCategory = _products.Where(x=> x.CategoryId == categoryId).ToList();
+            List<Product> listadoProductsByCategory = _context.Products.Where(x=> x.CategoryId == categoryId).ToList();
             return listadoProductsByCategory;
         }
 
         public List<Product> GetProductsByRestaurant(int restaurantId)
         {
-            List<Product> listadoProductByRestaurant = _products.Where(x => x.RestaurantId == restaurantId).ToList();
+            List<Product> listadoProductByRestaurant = _context.Products.Where(x => x.RestaurantId == restaurantId).ToList();
             return listadoProductByRestaurant;
         }
 
         public List<Product> GetProductsFavorite()
         {
-            List<Product> listadoProductFavorite = _products.Where( x => x.IsFavorite == true ).ToList();
+            List<Product> listadoProductFavorite = _context.Products.Where( x => x.IsFavorite == true ).ToList();
             return listadoProductFavorite;
         }
 
         public List<Product> GetProductsHappyHour()
         {
-            List<Product> listadoProductHappyHour = _products.Where(x => x.HappyHour == true).ToList();
+            List<Product> listadoProductHappyHour = _context.Products.Where(x => x.HappyHour == true).ToList();
             return listadoProductHappyHour;
         }
 
         public List<Product> GetProductsWithDiscount()
         {
-            List<Product> listadoProductsWithDiscount = _products.Where( x => x.Discount != 0).ToList();
+            List<Product> listadoProductsWithDiscount = _context.Products.Where( x => x.Discount != 0).ToList();
             return listadoProductsWithDiscount;
         }
 
-        public void IncrementPriceByRestaurant(double increment, int restaurantId)
+        public void IncrementPriceByRestaurant(double increment, int restaurantId)                  //VER SI FUNCIONA!!
         {
             List<Product> listadoProductsByRestaurant = GetProductsByRestaurant(restaurantId);
             for (int i= 0; i<listadoProductsByRestaurant.Count; i++)
             {
                 listadoProductsByRestaurant[i].Price += listadoProductsByRestaurant[i].Price * increment;
-                //save changes
             }
+            _context.SaveChanges();
         }
 
         public bool ModifyDiscount(int idProducto, double newDiscount)
@@ -75,12 +85,11 @@ namespace ProyectoFinal_Restaurante.Repositories.Implementations
             if (product != null)
             {
                 product.Discount = newDiscount;
+                //_context.Products.Update(product);
+                _context.SaveChanges();
                 return true;
             }
             return false;
-            //    _context.Products.Update(product);
-            //    _context.SaveChanges();
-
         }
 
         public bool ModifyHappyHour(int productId)
@@ -94,12 +103,13 @@ namespace ProyectoFinal_Restaurante.Repositories.Implementations
             {
                 product.HappyHour = true;
             }
+            _context.SaveChanges();
             return product.HappyHour;
         }
 
         public Product UpdateProduct(Product product)
         {
-            var productToUpdate = _products.FirstOrDefault(x=> x.ProductId == product.ProductId);
+            var productToUpdate = _context.Products.FirstOrDefault(x=> x.ProductId == product.ProductId);
 
             if (productToUpdate != null)
             {
@@ -108,7 +118,7 @@ namespace ProyectoFinal_Restaurante.Repositories.Implementations
                 productToUpdate.Price = product.Price;
                 productToUpdate.Discount = product.Discount;
                 productToUpdate.HappyHour = product.HappyHour;
-                //save changes
+                _context.SaveChanges();
                 return productToUpdate;
             }
             return null;
@@ -116,7 +126,7 @@ namespace ProyectoFinal_Restaurante.Repositories.Implementations
 
         public int GetRestaurantId (int idProducto)
         {
-            var producto = _products.FirstOrDefault(x => x.ProductId == idProducto);
+            var producto = _context.Products.FirstOrDefault(x => x.ProductId == idProducto);
             if (producto != null)
             {
                 return producto.RestaurantId;

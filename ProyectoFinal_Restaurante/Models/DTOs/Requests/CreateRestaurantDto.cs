@@ -12,7 +12,7 @@ namespace ProyectoFinal_Restaurante.Models.DTOs.Requests
         public string Email { get; set; }
         [Required]
         public string Password { get; set; }
-        [Phone]
+        
         public int? Phone { get; set; }
         public string? Address { get; set; }
     }

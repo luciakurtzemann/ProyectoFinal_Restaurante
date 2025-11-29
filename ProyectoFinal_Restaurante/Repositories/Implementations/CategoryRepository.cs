@@ -1,51 +1,60 @@
-﻿using ProyectoFinal_Restaurante.Entities;
+﻿using ProyectoFinal_Restaurante.Data;
+using ProyectoFinal_Restaurante.Entities;
 using ProyectoFinal_Restaurante.Repositories.Interfaces;
 
 namespace ProyectoFinal_Restaurante.Repositories.Implementations
 {
     public class CategoryRepository : ICategoryRepository
     {
+        private readonly ProyectoFinal_RestauranteContext _context;
+
+        public CategoryRepository (ProyectoFinal_RestauranteContext context)
+        {
+            _context = context;
+        }
         public Category CreateCategory(Category category)
         {
-            _categories.Add(category);
+            _context.Categories.Add(category);
+            _context.SaveChanges();
             return category;
         }
 
         public Category DeleteCategory(int id)
         {
-            var categoryToDelete = _categories.FirstOrDefault(x => x.CategoryId == id);
-            _categories.Remove(categoryToDelete);
+            var categoryToDelete = _context.Categories.FirstOrDefault(x => x.CategoryId == id);
+            _context.Categories.Remove(categoryToDelete);
+            _context.SaveChanges();
             return categoryToDelete;
         }
 
         public Category GetCategory(int id)
         {
-            var category = _categories.FirstOrDefault(x=>x.CategoryId == id);
+            var category = _context.Categories.FirstOrDefault(x=>x.CategoryId == id);
             return category;
         }
 
         public List<Category> GetCategoriesByRestaurant(int restaurantId)
         {
-            List<Category> listadoCategoryByRestaurant = _categories.Where(x => x.RestaurantId ==  restaurantId).ToList();
+            List<Category> listadoCategoryByRestaurant = _context.Categories.Where(x => x.RestaurantId ==  restaurantId).ToList();
             return listadoCategoryByRestaurant;
         }
 
         public Category UpdateCategory(Category category)
         {
-            var categoryToUpdate = _categories.FirstOrDefault(x => x.CategoryId ==  category.CategoryId);
+            var categoryToUpdate = _context.Categories.FirstOrDefault(x => x.CategoryId ==  category.CategoryId);
 
             if (categoryToUpdate != null)
             {
                 categoryToUpdate.CategoryName = category.CategoryName;
+                _context.SaveChanges();
                 return categoryToUpdate;
-                //save changes
             }
             return null;
         }
 
         public int GetRestaurantId(int idCategoria)
         {
-            var categoria = _categories.FirstOrDefault(x => x.CategoryId == idCategoria);
+            var categoria = _context.Categories.FirstOrDefault(x => x.CategoryId == idCategoria);
             if (categoria != null)
             {
                 return categoria.RestaurantId;
