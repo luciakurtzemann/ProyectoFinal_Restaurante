@@ -26,12 +26,10 @@ namespace ProyectoFinal_Restaurante.Controllers
         [HttpPost("authenticate")]
         public IActionResult Authenticate([FromBody] LoginRequestDto credentials)
         {
-            // Validamos usando el servicio (igual a tu ejemplo)
             Restaurant? restaurant = _restaurantService.Authenticate(credentials.Email, credentials.Password);
 
             if (restaurant is not null)
             {
-                // Generación del Token (IDÉNTICO A TU CÓDIGO)
                 var securityPassword = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_config["Authentication:SecretForKey"]));
 
                 var signature = new SigningCredentials(securityPassword, SecurityAlgorithms.HmacSha256);

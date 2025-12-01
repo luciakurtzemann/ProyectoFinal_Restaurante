@@ -79,11 +79,13 @@ namespace ProyectoFinal_Restaurante.Services.Implementations
         public CategoryDto UpdateCategory(UpdateCategoryDto category, int restaurantId)
         {
             var categoryRepo = _categoryRepository.GetCategory(category.categoryId);
-            if(categoryRepo.RestaurantId == restaurantId)
+            if(categoryRepo != null && categoryRepo.RestaurantId == restaurantId)
             {
                 Category categoryToUpdate = new Category()
                 {
+                    CategoryId = category.categoryId,
                     CategoryName = category.CategoryName,
+                    RestaurantId = restaurantId
                 };
                 Category categoryUpdated = _categoryRepository.UpdateCategory(categoryToUpdate);
 

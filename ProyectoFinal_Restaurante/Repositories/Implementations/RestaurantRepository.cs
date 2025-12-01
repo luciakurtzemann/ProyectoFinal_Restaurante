@@ -1,5 +1,6 @@
 ﻿using ProyectoFinal_Restaurante.Data;
 using ProyectoFinal_Restaurante.Entities;
+using ProyectoFinal_Restaurante.Models.DTOs.Responses;
 using ProyectoFinal_Restaurante.Repositories.Interfaces;
 
 namespace ProyectoFinal_Restaurante.Repositories.Implementations
@@ -61,5 +62,11 @@ namespace ProyectoFinal_Restaurante.Repositories.Implementations
         {
             return _context.Restaurants.FirstOrDefault(restaurant => restaurant.Email.ToLower() == email.ToLower());
         }
+
+        public List<Restaurant> GetRestaurantsList()
+        {
+            return _context.Restaurants.ToList();
+        }
+
     }
 }

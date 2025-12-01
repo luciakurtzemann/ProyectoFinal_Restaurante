@@ -84,5 +84,28 @@ namespace ProyectoFinal_Restaurante.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpGet("top")]
+        public IActionResult ObtenerTopRestaurante()
+        {
+            try
+            {
+                var restauranteTop = _restaurantService.GetTopRestaurant();
+                return Ok(restauranteTop);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet ("dashboard")]
+        [Authorize]
+        public IActionResult ObtenerResumenDashboard()
+        {
+            int restaurantId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value ?? "0");
+            var resumenRestaurante = _restaurantService.GetResumenRestaurante(restaurantId);
+            return Ok(resumenRestaurante);
+        }
     }
 }

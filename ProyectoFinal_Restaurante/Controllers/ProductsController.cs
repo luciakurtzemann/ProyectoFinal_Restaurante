@@ -107,18 +107,18 @@ namespace ProyectoFinal_Restaurante.Controllers
             
         }
 
-        [HttpPut("{id}/incrementPrice")]
+        [HttpPut("incrementPrice")]
         [Authorize]
-        public IActionResult IncrementPrice (double incrementoPrecio)
+        public IActionResult IncrementPriceByRestaurant (double incrementoPrecio)
         {
             int restaurantId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value ?? "0");
             _productService.IncrementPriceByRestaurant(incrementoPrecio, restaurantId);
             return NoContent();
         }
 
-        [HttpPut("{id}/happyHour")]
+        [HttpPut("{productId}/happyHour")]
         [Authorize]
-        public IActionResult ModificarHappyHour ([FromBody] int productId)
+        public IActionResult ModificarHappyHour (int productId)
         {
             int restaurantId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value ?? "0");
             var exitoso = _productService.ModifyHappyHour(productId, restaurantId);
@@ -129,9 +129,9 @@ namespace ProyectoFinal_Restaurante.Controllers
             return NotFound("El producto que desea modificar no existe.");
         }
 
-        [HttpPut("{id}/descuento")]
+        [HttpPut("{productId}/descuento")]
         [Authorize]
-        public IActionResult ModificarDescuento([FromBody] int productId, double discount)
+        public IActionResult ModificarDescuento( int productId, double discount)
         {
             try
             {
@@ -150,7 +150,7 @@ namespace ProyectoFinal_Restaurante.Controllers
         }
 
 
-        [HttpPut("{id}")]
+        [HttpPut("actualizar")]
         [Authorize]
         public IActionResult ActualizarProducto ([FromBody]UpdateProductDto product)
         {
@@ -170,28 +170,8 @@ namespace ProyectoFinal_Restaurante.Controllers
             }
         }
 
-        [HttpPut("/{id}/disponibilidad")]
-        [Authorize]
-        public IActionResult CambiarDisponibilidadProducto (int productId)
-        {
-            try
-            {
-                int restaurantId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value ?? "0");
-                _productService.ChangeDisponibilidad(productId, restaurantId);
-                return Ok(productId);
 
-            }
-            catch (NotFoundException ex)
-            {
-                return NotFound(ex.Message) ;
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message );
-            }
-        }
-
-        [HttpPut(("/{id}/cambiarFavorito"))]
+        [HttpPut(("/{productId}/cambiarFavorito"))]
         public IActionResult CambiarFavorito (int productId)
         {
             try

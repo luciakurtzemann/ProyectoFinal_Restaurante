@@ -11,5 +11,7 @@ namespace ProyectoFinal_Restaurante.Services.Interfaces
         public bool DeleteRestaurant(int restaurantId, int loggedRestaurant);
         public string ChangePassword(UpdateCredentialsDto updateCredentialsDto, int loggedRestaurant);
         public Restaurant? Authenticate(string email, string password);
+        public RestaurantDto GetTopRestaurant();
+        public DashboardDto GetResumenRestaurante(int restaurantId);
     }
 }

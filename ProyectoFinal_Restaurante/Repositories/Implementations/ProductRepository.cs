@@ -134,18 +134,6 @@ namespace ProyectoFinal_Restaurante.Repositories.Implementations
             return 0;
         }
 
-        public bool ChangeDisponibilidad(int idProducto)
-        {
-            var producto = _context.Products.FirstOrDefault(x => x.ProductId==idProducto);
-            if (producto.Agotado == true)
-            {
-                producto.Agotado = false;
-                return false;
-            }
-            producto.Agotado = true;
-            return true;
-        }
-
         public bool ChangeFavorite (int idProducto)
         {
             var producto = _context.Products.FirstOrDefault(x => x.ProductId == idProducto);

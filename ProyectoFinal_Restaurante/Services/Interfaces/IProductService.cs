@@ -20,7 +20,7 @@ namespace ProyectoFinal_Restaurante.Services.Interfaces
         public void IncrementPriceByRestaurant(double increment, int restaurantId);
         public bool ModifyHappyHour(int productId, int restaurantId);
         public int GetRestaurantId(int idProducto);
-        public void ChangeDisponibilidad(int idProducto, int restaurantId);
         public void ChangeFavorite (int idProducto);
+        
     }
 }

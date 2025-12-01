@@ -4,6 +4,7 @@ using ProyectoFinal_Restaurante.Models.DTOs.Requests;
 using ProyectoFinal_Restaurante.Models.DTOs.Responses;
 using ProyectoFinal_Restaurante.Repositories.Interfaces;
 using ProyectoFinal_Restaurante.Services.Interfaces;
+using System.Numerics;
 
 namespace ProyectoFinal_Restaurante.Services.Implementations
 {
@@ -11,10 +12,14 @@ namespace ProyectoFinal_Restaurante.Services.Implementations
     {
         //INYECCIÓN DE DEPENDENCIAS
         private readonly IRestaurantRepository _restaurantRepository;
+        private readonly IProductRepository _productRepository;
+        private readonly ICategoryRepository _categoryRepository;
 
-        public RestaurantService (IRestaurantRepository restaurantRepository)
+        public RestaurantService (IRestaurantRepository restaurantRepository, IProductRepository productRepository, ICategoryRepository categoryRepository)
         {
             _restaurantRepository = restaurantRepository;
+            _productRepository = productRepository;
+            _categoryRepository = categoryRepository;
         }
 
 
@@ -121,6 +126,58 @@ namespace ProyectoFinal_Restaurante.Services.Implementations
                 return restaurant;
             }
             return null;
+        }
+
+
+
+        public RestaurantDto GetTopRestaurant()
+        {
+            var listadoRestaurantes = _restaurantRepository.GetRestaurantsList();
+            var todosLosFavoritos = _productRepository.GetProductsFavorite();
+            int maxFavoritos = 0;
+
+            if (listadoRestaurantes != null)
+            {
+                var restauranteTop = listadoRestaurantes.OrderByDescending(x => todosLosFavoritos.Count(r => r.RestaurantId == x.RestaurantId)).FirstOrDefault();
+
+                if (restauranteTop != null)
+                {
+                    RestaurantDto restaurantResponse = new RestaurantDto()
+                    {
+                        RestaurantId = restauranteTop.RestaurantId,
+                        Name = restauranteTop.Name,
+                        Email = restauranteTop.Email,
+                        Phone = restauranteTop.Phone,
+                        Address = restauranteTop.Address,
+                    };
+                    return restaurantResponse;
+                }
+                throw new Exception("No se pudo calcular el restaurante top.");
+                  
+            }
+            else
+            {
+                throw new Exception("Aún no hay restaurantes agregados");
+            }
+        }
+
+        public DashboardDto GetResumenRestaurante(int restaurantId)
+        {
+            var productosPropios = _productRepository.GetProductsByRestaurant(restaurantId);
+            var categoriasPropias = _categoryRepository.GetCategoriesByRestaurant(restaurantId);
+            
+            DashboardDto resumen = new DashboardDto
+            {
+                totalProductos = productosPropios.Count(),
+                totalCategorias = categoriasPropias.Count(),
+                productosEnHappyHour = productosPropios.Count(x => x.HappyHour),
+                productosConDescuento = productosPropios.Count(x => x.Discount > 0),
+                productoMasCaro = productosPropios.OrderByDescending(x => x.Price).Select(x => x.ProductName).FirstOrDefault() ?? "Sin datos",
+                productoMasBarato = productosPropios.OrderBy(x => x.Price).Select(x => x.ProductName).FirstOrDefault() ?? "Sin datos",
+            };
+
+            return resumen;
+            
         }
     }
 }
