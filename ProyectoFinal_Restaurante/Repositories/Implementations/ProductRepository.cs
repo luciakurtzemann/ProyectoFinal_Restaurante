@@ -69,7 +69,7 @@ namespace ProyectoFinal_Restaurante.Repositories.Implementations
             return listadoProductsWithDiscount;
         }
 
-        public void IncrementPriceByRestaurant(double increment, int restaurantId)                  //VER SI FUNCIONA!!
+        public void IncrementPriceByRestaurant(double increment, int restaurantId)  
         {
             List<Product> listadoProductsByRestaurant = GetProductsByRestaurant(restaurantId);
             for (int i= 0; i<listadoProductsByRestaurant.Count; i++)

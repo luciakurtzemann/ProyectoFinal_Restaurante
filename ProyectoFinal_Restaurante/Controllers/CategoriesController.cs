@@ -62,21 +62,38 @@ namespace ProyectoFinal_Restaurante.Controllers
         [Authorize]
         public IActionResult CrearCategoria(CreateCategoryDto dto)
         {
-            int restaurantId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value ?? "0");
-            var categoriaCreada = _categoryService.CreateCategory(dto, restaurantId);
-            return Ok(categoriaCreada);
+            try
+            {
+                int restaurantId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value ?? "0");
+                var categoriaCreada = _categoryService.CreateCategory(dto, restaurantId);
+                return Ok(categoriaCreada);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            
         }
 
         [HttpDelete]
         [Authorize]
         public IActionResult EliminarCategoria ([FromBody] int categoryId)
         {
-            var exisoso = _categoryService.DeleteCategory(categoryId);
-            if (exisoso)
+            try
             {
-                return NoContent();
+                int restaurantId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value ?? "0");
+                var exisoso = _categoryService.DeleteCategory(categoryId, restaurantId);
+                if (exisoso)
+                {
+                    return NoContent();
+                }
+                return NotFound();
             }
-            return NotFound();
+            catch (Exception ex)
+            {
+                return BadRequest (ex.Message);
+            }
+            
         }
     }
 }

@@ -22,30 +22,39 @@ namespace ProyectoFinal_Restaurante.Services.Implementations
         //MÉTODOS
         public CategoryDto CreateCategory(CreateCategoryDto category, int loggedRestaurantId)
         {
-            Category categoryToCreate = new Category()
+            if (category.RestaurantId == loggedRestaurantId)
             {
-                CategoryName = category.CategoryName,
-                RestaurantId = loggedRestaurantId
-            };
-            Category createdCategory = _categoryRepository.CreateCategory(categoryToCreate);
+                Category categoryToCreate = new Category()
+                {
+                    CategoryName = category.CategoryName,
+                    RestaurantId = loggedRestaurantId
+                };
+                Category createdCategory = _categoryRepository.CreateCategory(categoryToCreate);
 
-            CategoryDto categoryResponse = new CategoryDto()
-            {
-                CategoryId = createdCategory.CategoryId,
-                CategoryName = createdCategory.CategoryName,
-                RestaurantId = createdCategory.RestaurantId
-            };
-            return categoryResponse;
+                CategoryDto categoryResponse = new CategoryDto()
+                {
+                    CategoryId = createdCategory.CategoryId,
+                    CategoryName = createdCategory.CategoryName,
+                    RestaurantId = createdCategory.RestaurantId
+                };
+                return categoryResponse;
+            }
+            throw new Exception("No puede crear un producto en una categoría de otro restaurante.");
         }
 
-        public bool DeleteCategory(int id)
+        public bool DeleteCategory(int id, int loggedRestaurantId)
         {
-            var categoryToDelete = _categoryRepository.DeleteCategory(id);
-            if (categoryToDelete != null)
+            var restauranteCorrespondiente = _categoryRepository.GetRestaurantId(id);
+            if( restauranteCorrespondiente == loggedRestaurantId)
             {
-                return true;
+                var categoryToDelete = _categoryRepository.DeleteCategory(id);
+                if (categoryToDelete != null)
+                {
+                    return true;
+                }
+                return false;
             }
-            return false;
+            throw new Exception("No puede eliminar un producto en una categoría de otro restaurante.");
         }
 
         public List<CategoryDto> GetCategoriesByRestaurant(int restaurantId)

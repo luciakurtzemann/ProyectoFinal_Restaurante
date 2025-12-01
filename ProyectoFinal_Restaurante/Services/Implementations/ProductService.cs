@@ -75,15 +75,15 @@ namespace ProyectoFinal_Restaurante.Services.Implementations
         {
             var product = GetProductById(productId);
             int ownerId = _productRepository.GetRestaurantId(productId);
+            if (ownerId == 0)
+            {
+                return false;
+            }
             if (ownerId != loggedRestaurantId)
             {
                 throw new Exception("No puedes borrar productos ajenos.");
             }
             var productToDelete = _productRepository.DeleteProduct(productId);
-            if (productToDelete == null)
-            {
-                return false;
-            }
             return true;
         }
 
@@ -340,7 +340,6 @@ namespace ProyectoFinal_Restaurante.Services.Implementations
                 throw new NotFoundException("El producto que busca no existe.");
             }
             throw new Exception("No puede modificar un producto de otro restaurante");
-
         }
 
         public List<ProductDto> GetProductosDisponibles()
