@@ -68,5 +68,10 @@ namespace ProyectoFinal_Restaurante.Repositories.Implementations
             return _context.Restaurants.ToList();
         }
 
+        public Restaurant GetRestaurantById (int restaurantId)
+        {
+            return _context.Restaurants.FirstOrDefault(x => x.RestaurantId == restaurantId);
+        }
+
     }
 }

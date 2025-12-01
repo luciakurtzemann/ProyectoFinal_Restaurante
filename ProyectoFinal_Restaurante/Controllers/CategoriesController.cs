@@ -20,8 +20,15 @@ namespace ProyectoFinal_Restaurante.Controllers
         [HttpGet]
         public IActionResult GetAllCategoriesByRestaurant(int restaurantId)
         {
-            var listaCategoriasRestaurante = _categoryService.GetCategoriesByRestaurant(restaurantId);
-            return Ok (listaCategoriasRestaurante);
+            try
+            {
+                var listaCategoriasRestaurante = _categoryService.GetCategoriesByRestaurant(restaurantId);
+                return Ok(listaCategoriasRestaurante);
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
         }
 
         [HttpGet("{id}")]

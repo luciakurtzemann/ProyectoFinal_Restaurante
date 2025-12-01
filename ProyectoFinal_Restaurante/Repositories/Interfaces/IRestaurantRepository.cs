@@ -11,6 +11,8 @@ namespace ProyectoFinal_Restaurante.Repositories.Interfaces
         public string ChangePassword(int restaurantId, string oldPassword, string newPassword);
         public Restaurant? GetByEmail (string  email);
         public List<Restaurant> GetRestaurantsList();
-       
+        public Restaurant GetRestaurantById(int restaurantId);
+
+
     }
 }

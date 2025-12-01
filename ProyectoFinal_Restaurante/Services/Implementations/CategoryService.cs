@@ -12,10 +12,12 @@ namespace ProyectoFinal_Restaurante.Services.Implementations
     {
         //INYECCIÓN DE DEPENDENCIAS
         private readonly ICategoryRepository _categoryRepository;
+        private readonly IRestaurantRepository _restaurantRepository;
 
-        public CategoryService(ICategoryRepository categoryRepository)
+        public CategoryService(ICategoryRepository categoryRepository, IRestaurantRepository restaurantRepository)
         {
             _categoryRepository = categoryRepository;
+            _restaurantRepository = restaurantRepository;
         }
 
 
@@ -59,13 +61,18 @@ namespace ProyectoFinal_Restaurante.Services.Implementations
 
         public List<CategoryDto> GetCategoriesByRestaurant(int restaurantId)
         {
-            List<CategoryDto> listadoCategoryPorRestaurantDto = _categoryRepository.GetCategoriesByRestaurant(restaurantId).Select(category => new CategoryDto()
+            var restaurante = _restaurantRepository.GetRestaurantById(restaurantId);
+            if( restaurante != null)
+            {
+                List<CategoryDto> listadoCategoryPorRestaurantDto = _categoryRepository.GetCategoriesByRestaurant(restaurantId).Select(category => new CategoryDto()
                 {
                     CategoryId = category.CategoryId,
                     CategoryName = category.CategoryName,
                     RestaurantId = category.RestaurantId
                 }).ToList();
-            return listadoCategoryPorRestaurantDto;
+                return listadoCategoryPorRestaurantDto;
+            }
+            throw new NotFoundException("El restaurante solicitado no existe");
         }
 
         public CategoryDto GetCategory(int id)
