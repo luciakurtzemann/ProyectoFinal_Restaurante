@@ -255,7 +255,12 @@ namespace ProyectoFinal_Restaurante.Services.Implementations
 
         public bool ModifyHappyHour(int productId, int restaurantId)
         {
-            if (restaurantId == _productRepository.GetRestaurantId(productId))
+            var productRepo = _productRepository.GetProductById(productId);
+            if (productRepo == null)
+            {
+                throw new NotFoundException("El producto seleccionado no existe.");
+            }
+            if ( restaurantId == _productRepository.GetRestaurantId(productId))
             {
                 return _productRepository.ModifyHappyHour(productId);
             }

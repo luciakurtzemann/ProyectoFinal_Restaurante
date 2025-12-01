@@ -146,13 +146,25 @@ namespace ProyectoFinal_Restaurante.Controllers
         [Authorize]
         public IActionResult ModificarHappyHour (int productId)
         {
-            int restaurantId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value ?? "0");
-            var exitoso = _productService.ModifyHappyHour(productId, restaurantId);
-            if (exitoso)
+            try
             {
-                return NoContent();
+                int restaurantId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value ?? "0");
+                var exitoso = _productService.ModifyHappyHour(productId, restaurantId);
+                if (exitoso)
+                {
+                    return NoContent();
+                }
+                return NotFound("El producto que desea modificar no existe.");
             }
-            return NotFound("El producto que desea modificar no existe.");
+            catch (NotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            
         }
 
         [HttpPut("{productId}/descuento")]
