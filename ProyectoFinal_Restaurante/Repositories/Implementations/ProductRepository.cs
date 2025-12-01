@@ -136,15 +136,30 @@ namespace ProyectoFinal_Restaurante.Repositories.Implementations
         public bool ChangeFavorite (int idProducto)
         {
             var producto = _context.Products.FirstOrDefault(x => x.ProductId == idProducto);
-            if (producto.IsFavorite == true)
+            if (producto != null)
             {
-                producto.IsFavorite = false;
+                producto.IsFavorite = !producto.IsFavorite;
                 _context.SaveChanges ();
-                return false;
+                return producto.IsFavorite;
             }
-            producto.IsFavorite = true;
-            _context.SaveChanges();
-            return true;
+            return false;
+        }
+
+        public bool ChangeDisponibilidad(int idProducto)
+        {
+            var producto = _context.Products.FirstOrDefault(x => x.ProductId == idProducto);
+            if (producto != null)
+            {
+                producto.Agotado = !producto.Agotado;
+                _context.SaveChanges ();
+                return producto.Agotado;
+            }
+            return false;
+        }
+
+        public List<Product> GetProductsDisponibles()
+        {
+            return _context.Products.Where(x=> x.Agotado==false).ToList();
         }
     }
 }

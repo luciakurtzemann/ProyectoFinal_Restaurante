@@ -197,7 +197,7 @@ namespace ProyectoFinal_Restaurante.Controllers
         }
 
 
-        [HttpPut(("/{productId}/cambiarFavorito"))]
+        [HttpPut("{productId}/cambiarFavorito")]
         public IActionResult CambiarFavorito (int productId)
         {
             try
@@ -209,6 +209,33 @@ namespace ProyectoFinal_Restaurante.Controllers
             {
                 return NotFound(ex.Message);
             }
+        }
+
+        [HttpPut("{productId}/cambiarDisponibilidad")]
+        [Authorize]
+        public IActionResult CambiarDisponibilidad (int productId)
+        {
+            try
+            {
+                int restaurantId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value ?? "0");
+                _productService.ChangeDisponibilidad(productId, restaurantId);
+                return Ok(productId);
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet("disponibles")]
+        public IActionResult ObtenerProductosDisponibles()
+        {
+            var productosDisponibles = _productService.GetProductosDisponibles();
+            return Ok(productosDisponibles);
         }
 
     }

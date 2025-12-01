@@ -15,6 +15,7 @@ namespace ProyectoFinal_Restaurante.Models.DTOs.Requests
         [Range(0, 1)]
         public double Discount { get; set; } = 0;
         public bool HappyHour { get; set; }
+        public bool Agotado { get; set; } = false;
         public int CategoryId { get; set; }
         //public int RestaurantId { get; set; }
     }

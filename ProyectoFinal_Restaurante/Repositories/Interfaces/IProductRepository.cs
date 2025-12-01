@@ -20,5 +20,7 @@ namespace ProyectoFinal_Restaurante.Repositories.Interfaces
         public bool ModifyHappyHour (int productId);
         public int GetRestaurantId(int idProducto);
         public bool ChangeFavorite(int idProducto);
+        public bool ChangeDisponibilidad(int idProducto);
+        public List<Product> GetProductsDisponibles();
     }
 }

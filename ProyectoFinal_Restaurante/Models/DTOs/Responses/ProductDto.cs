@@ -13,6 +13,7 @@ namespace ProyectoFinal_Restaurante.Models.DTOs.Responses
         public double Discount { get; set; } = 0;
         public bool HappyHour { get; set; } = false;
         public bool IsFavorite { get; set; } = false;
+        public bool Agotado { get; set; } = false;
         public int RestaurantId { get; set; }
         public int CategoryId { get; set; }
     }

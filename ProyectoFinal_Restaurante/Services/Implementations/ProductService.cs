@@ -42,6 +42,7 @@ namespace ProyectoFinal_Restaurante.Services.Implementations
                     Discount = productDto.Discount,
                     HappyHour = productDto.HappyHour,
                     CategoryId = productDto.CategoryId,
+                    Agotado = productDto.Agotado,
                     RestaurantId = loggedRestaurantId,
                 };
                 _productRepository.CreateProduct(product);
@@ -55,6 +56,7 @@ namespace ProyectoFinal_Restaurante.Services.Implementations
                     Discount = product.Discount,
                     HappyHour = product.HappyHour,
                     IsFavorite = product.IsFavorite,
+                    Agotado = product.Agotado,
                     RestaurantId = product.RestaurantId,
                     CategoryId = product.CategoryId,
 
@@ -96,6 +98,7 @@ namespace ProyectoFinal_Restaurante.Services.Implementations
                 Discount = product.Discount,
                 HappyHour = product.HappyHour,
                 IsFavorite = product.IsFavorite,
+                Agotado = product.Agotado,
                 RestaurantId = product.RestaurantId,
                 CategoryId = product.CategoryId,
             }).ToList();
@@ -117,6 +120,7 @@ namespace ProyectoFinal_Restaurante.Services.Implementations
                     Price = producto.Price,
                     Discount = producto.Discount,
                     HappyHour = producto.HappyHour,
+                    Agotado= producto.Agotado,
                     IsFavorite = producto.IsFavorite,
                     RestaurantId = producto.RestaurantId,
                     CategoryId = producto.CategoryId,
@@ -140,6 +144,7 @@ namespace ProyectoFinal_Restaurante.Services.Implementations
                     Price = product.Price,
                     Discount = product.Discount,
                     HappyHour = product.HappyHour,
+                    Agotado= product.Agotado,
                     IsFavorite = product.IsFavorite,
                     RestaurantId = product.RestaurantId,
                     CategoryId = product.CategoryId,
@@ -163,6 +168,7 @@ namespace ProyectoFinal_Restaurante.Services.Implementations
                     Discount = product.Discount,
                     HappyHour = product.HappyHour,
                     IsFavorite = product.IsFavorite,
+                    Agotado = product.Agotado,
                     RestaurantId = product.RestaurantId,
                     CategoryId = product.CategoryId,
                 }).ToList();
@@ -185,6 +191,7 @@ namespace ProyectoFinal_Restaurante.Services.Implementations
                 Discount = product.Discount,
                 HappyHour = product.HappyHour,
                 IsFavorite = product.IsFavorite,
+                Agotado = product.Agotado,
                 RestaurantId = product.RestaurantId,
                 CategoryId = product.CategoryId,
             }).ToList();
@@ -202,6 +209,7 @@ namespace ProyectoFinal_Restaurante.Services.Implementations
                 Discount = product.Discount,
                 HappyHour = product.HappyHour,
                 IsFavorite = product.IsFavorite,
+                Agotado = product.Agotado,
                 RestaurantId = product.RestaurantId,
                 CategoryId = product.CategoryId,
             }).ToList();
@@ -219,6 +227,7 @@ namespace ProyectoFinal_Restaurante.Services.Implementations
                 Discount = product.Discount,
                 HappyHour = product.HappyHour,
                 IsFavorite = product.IsFavorite,
+                Agotado = product.Agotado,
                 RestaurantId = product.RestaurantId,
                 CategoryId = product.CategoryId,
             }).ToList();
@@ -266,6 +275,7 @@ namespace ProyectoFinal_Restaurante.Services.Implementations
                     Price = productDto.Price,
                     Discount = productDto.Discount,
                     HappyHour = productDto.HappyHour,
+                    Agotado = productDto.Agotado,
                 };
                 Product productUpdated = _productRepository.UpdateProduct(product);
 
@@ -278,6 +288,7 @@ namespace ProyectoFinal_Restaurante.Services.Implementations
                     Discount = productUpdated.Discount,
                     HappyHour = productUpdated.HappyHour,
                     IsFavorite = productUpdated.IsFavorite,
+                    Agotado = productUpdated.Agotado,
                     RestaurantId = productUpdated.RestaurantId,
                     CategoryId = productUpdated.CategoryId,
                 };
@@ -314,7 +325,41 @@ namespace ProyectoFinal_Restaurante.Services.Implementations
             throw new NotFoundException("El producto que busca no existe.");
         }
 
-        
+        public void ChangeDisponibilidad (int idProducto, int loggedRestaurantId)
+        {
+            var restauranteCorrespondiente = _productRepository.GetRestaurantId(idProducto);
+
+            if (restauranteCorrespondiente == loggedRestaurantId)
+            {
+                var producto = GetProductById(idProducto);
+                if (producto != null)
+                {
+                    _productRepository.ChangeDisponibilidad(idProducto);
+                    return;
+                }
+                throw new NotFoundException("El producto que busca no existe.");
+            }
+            throw new Exception("No puede modificar un producto de otro restaurante");
+
+        }
+
+        public List<ProductDto> GetProductosDisponibles()
+        {
+            var listaProductsDto = _productRepository.GetProductsDisponibles().Select(product => new ProductDto()
+            {
+                ProductId = product.ProductId,
+                ProductName = product.ProductName,
+                ProductDescription = product.ProductDescription,
+                Price = product.Price,
+                Discount = product.Discount,
+                HappyHour = product.HappyHour,
+                IsFavorite = product.IsFavorite,
+                Agotado = product.Agotado,
+                RestaurantId = product.RestaurantId,
+                CategoryId = product.CategoryId,
+            }).ToList();
+            return listaProductsDto;
+        }
 
     }
 }

@@ -21,6 +21,9 @@ namespace ProyectoFinal_Restaurante.Services.Interfaces
         public bool ModifyHappyHour(int productId, int restaurantId);
         public int GetRestaurantId(int idProducto);
         public void ChangeFavorite (int idProducto);
-        
+        public void ChangeDisponibilidad(int idProducto, int loggedRestaurantId);
+        public List<ProductDto> GetProductosDisponibles();
+
+
     }
 }
