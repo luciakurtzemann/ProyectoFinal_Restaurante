@@ -43,15 +43,29 @@ namespace ProyectoFinal_Restaurante.Controllers
         [HttpGet("categoria{categoryId}")]
         public IActionResult GetProductsByCategory (int categoryId)
         {
-            var listaProductosCategoria = _productService.GetProductsByCategory(categoryId);
-            return Ok(listaProductosCategoria);
+            try
+            {
+                var listaProductosCategoria = _productService.GetProductsByCategory(categoryId);
+                return Ok(listaProductosCategoria);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpGet("restaurante{restaurantId}")]
         public IActionResult GetProductsByRestaurant (int restaurantId)
         {
-            var listaProductosRestaurante = _productService.GetProductsByRestaurant(restaurantId);
-            return Ok(listaProductosRestaurante);
+            try
+            {
+                var listaProductosRestaurante = _productService.GetProductsByRestaurant(restaurantId);
+                return Ok(listaProductosRestaurante);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
 
@@ -80,9 +94,21 @@ namespace ProyectoFinal_Restaurante.Controllers
         [Authorize]
         public IActionResult CreateProduct([FromBody] CreateProductDto product)
         {
-            int restaurantId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value ?? "0");
-            var productoCreado = _productService.CreateProduct(product, restaurantId);
-            return Ok(productoCreado);
+            try
+            {
+                int restaurantId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value ?? "0");
+                var productoCreado = _productService.CreateProduct(product, restaurantId);
+                return Ok(productoCreado);
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            
         }
 
         [HttpDelete]

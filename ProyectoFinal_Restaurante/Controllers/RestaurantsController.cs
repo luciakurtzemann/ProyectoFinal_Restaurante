@@ -45,7 +45,7 @@ namespace ProyectoFinal_Restaurante.Controllers
             }
         }
 
-        [HttpPut("{id}")]
+        [HttpPut("actualizar")]
         [Authorize]
         public IActionResult ActualizarRestaurante([FromBody]UpdateRestaurantDto dto)
         {
@@ -65,7 +65,7 @@ namespace ProyectoFinal_Restaurante.Controllers
             }
         }
 
-        [HttpPut ("{id}/cambioCredenciales")]
+        [HttpPut ("cambioCredenciales")]
         [Authorize]
         public IActionResult CambiarCredenciales (UpdateCredentialsDto updateCredentialsDto)
         {

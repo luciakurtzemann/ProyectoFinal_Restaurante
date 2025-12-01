@@ -85,7 +85,6 @@ namespace ProyectoFinal_Restaurante.Repositories.Implementations
             if (product != null)
             {
                 product.Discount = newDiscount;
-                //_context.Products.Update(product);
                 _context.SaveChanges();
                 return true;
             }

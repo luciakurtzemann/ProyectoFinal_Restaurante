@@ -87,7 +87,6 @@ namespace ProyectoFinal_Restaurante.Services.Implementations
                     RestaurantId = restaurant.RestaurantId,
                     Name = restaurant.Name,
                     Email = restaurant.Email,
-                    Password = restaurant.Password,
                     Phone = restaurant.Phone,
                     Address = restaurant.Address,
                 };
@@ -108,7 +107,7 @@ namespace ProyectoFinal_Restaurante.Services.Implementations
             }
             else
             {
-                throw new Exception("No se puede eliminar un restaurante que no sea propio.");
+                throw new Exception("No se puede actualizar un restaurante que no sea propio.");
             }
             
         }
